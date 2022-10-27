@@ -1,0 +1,1040 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={W2 In-class practice},
+  pdfauthor={Jadon Fowler jaf582},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{W2 In-class practice}
+\author{Jadon Fowler jaf582}
+\date{2022-09-08}
+
+\begin{document}
+\maketitle
+
+\hypertarget{instructions}{%
+\section{Instructions}\label{instructions}}
+
+Download a copy of this markdown. Change the \texttt{author:} tag above
+to have your name and NAU's ID. Fill in the chunks with your R code that
+solves the problem. Knit your final document into a HTML file and submit
+it through BBLearn in the assignment {[}In-class{]} Regex before the end
+of the class.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jabref.commits }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"res.csv"}\NormalTok{)}
+\NormalTok{comments }\OtherTok{\textless{}{-}}\NormalTok{ jabref.commits}\SpecialCharTok{$}\NormalTok{comment}
+\FunctionTok{head}\NormalTok{(comments)  }\CommentTok{\#lookup the head}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "add changelog"                                                   
+## [2] "remove from merged"                                              
+## [3] "state use"                                                       
+## [4] "try wit explicit dependency"                                     
+## [5] "update to lucence 9.1"                                           
+## [6] "Merge remote-tracking branch 'upstream/main' into lucenceUpgrade"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tail}\NormalTok{(comments)  }\CommentTok{\#lookup the tail}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Merge pull request #8057 from JabRef/fix-tests"                           
+## [2] "Merge pull request #8059 from JabRef/fix-importWorksAsExpected-on-windows"
+## [3] "Let the test run on Windows, too"                                         
+## [4] "Fix wrong parameter at preferences at test"                               
+## [5] "Refine test description and refine the test"                              
+## [6] "Use new cache\" property of setup-java\""
+\end{verbatim}
+
+In the previous chunk, we imported a comma-separated file and created an
+array \texttt{comments} that contain the commit messages for a set of
+JabRef project's commits. We will use this array to solve the following
+problems.
+
+\hypertarget{problem-1}{%
+\subsubsection{Problem 1}\label{problem-1}}
+
+Find the pattern \texttt{translations} in \texttt{comments}. To do so,
+follow these steps:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  create a string \texttt{pattern} containing a regular expression
+  pattern to match \texttt{"translations"};
+\item
+  use the
+  \href{https://stringr.tidyverse.org/reference/str_detect.html}{\texttt{str\_detect()}}
+  function to check whether \texttt{pattern} matches the comments in
+  \texttt{commits} variable and save the result in a variable named
+  \texttt{matches};
+\item
+  use the
+  \href{https://dplyr.tidyverse.org/reference/if_else.html}{\texttt{if\_else()}
+  function} to create a vector, denoted as \texttt{tl\_matches},
+  containing \texttt{yes} and \texttt{no} according to the values in
+  \texttt{matches} variable.
+\item
+  lookup the \texttt{comments} selecting only the positions that have a
+  match. Show the head and the tail of the filtered data.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pattern }\OtherTok{\textless{}{-}} \StringTok{"translations"}
+\NormalTok{matches }\OtherTok{\textless{}{-}} \FunctionTok{str\_detect}\NormalTok{(comments, pattern)}
+\NormalTok{tl\_matches }\OtherTok{\textless{}{-}} \FunctionTok{if\_else}\NormalTok{(matches, }\StringTok{"yes"}\NormalTok{, }\StringTok{"no"}\NormalTok{)}
+\NormalTok{filtered.comments }\OtherTok{\textless{}{-}}\NormalTok{ comments[matches]}
+\FunctionTok{head}\NormalTok{(filtered.comments)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "New translations JabRef_en.properties (Japanese) (#8331)"
+## [2] "New translations JabRef_en.properties (Turkish) (#8321)" 
+## [3] "New translations JabRef_en.properties (German) (#8318)"  
+## [4] "New translations JabRef_en.properties (Korean)"          
+## [5] "New translations JabRef_en.properties (Tagalog)"         
+## [6] "New translations JabRef_en.properties (Danish)"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tail}\NormalTok{(filtered.comments)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "New translations JabRef_en.properties (Vietnamese)"           
+## [2] "New translations JabRef_en.properties (Portuguese, Brazilian)"
+## [3] "New translations JabRef_en.properties (Indonesian)"           
+## [4] "New translations JabRef_en.properties (Persian)"              
+## [5] "New translations JabRef_en.properties (Russian)"              
+## [6] "New translations JabRef_en.properties (French)"
+\end{verbatim}
+
+\hypertarget{problem-2}{%
+\subsubsection{Problem 2}\label{problem-2}}
+
+Find a pattern to match both \texttt{merge} and \texttt{Merge}. To do
+so:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  create a string \texttt{pattern} containing a regular expression
+  pattern to match \texttt{"merge"} and \texttt{"Merge"};
+\item
+  use the
+  \href{https://stringr.tidyverse.org/reference/str_detect.html}{\texttt{str\_detect()}}
+  to check whether \texttt{pattern} matches the comments in
+  \texttt{commits} variable and save the result in a variable named
+  \texttt{matches};
+\item
+  lookup the \texttt{comments} selecting only the positions that have a
+  match. Show the head and the tail of the filtered data.
+\item
+  use \texttt{sum()} function to compute the number of times
+  \texttt{pattern} matches the comments.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pattern }\OtherTok{\textless{}{-}} \StringTok{"[Mm]erge"}
+\NormalTok{matches }\OtherTok{\textless{}{-}} \FunctionTok{str\_detect}\NormalTok{(comments, pattern)}
+\NormalTok{filtered.comments }\OtherTok{\textless{}{-}}\NormalTok{ comments[matches]}
+\FunctionTok{head}\NormalTok{(filtered.comments)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "remove from merged"                                                    
+## [2] "Merge remote-tracking branch 'upstream/main' into lucenceUpgrade"      
+## [3] "Merge remote-tracking branch 'upstream/main' into checkKeygenOverwrite"
+## [4] "Merge GitBook view"                                                    
+## [5] "Merge remote-tracking branch 'origin/main' into fix-8372"              
+## [6] "Merge branch 'main' into fix-for-issue-8195"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sum}\NormalTok{(}\FunctionTok{str\_detect}\NormalTok{(comments, pattern))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 154
+\end{verbatim}
+
+\hypertarget{problem-3}{%
+\subsubsection{Problem 3}\label{problem-3}}
+
+Find a pattern to match the pull request numbers that start with
+\texttt{\#845}, \texttt{\#854}, and \texttt{\#812}. To do so:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  create a string \texttt{pattern} containing a regular expression
+  pattern to match the pull request numbers \texttt{\#845},
+  \texttt{\#854}, and \texttt{\#812}.
+\item
+  check whether the pattern matches the comments and ave the result in
+  the \texttt{matches} variable.
+\item
+  lookup the \texttt{comments} selecting only the positions that have a
+  match, make sure you show the results.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pattern }\OtherTok{\textless{}{-}} \StringTok{"\#(845|854|812)"}
+\NormalTok{matches }\OtherTok{\textless{}{-}} \FunctionTok{str\_detect}\NormalTok{(comments, pattern)}
+\NormalTok{filtered.comments }\OtherTok{\textless{}{-}}\NormalTok{ comments[matches]}
+\FunctionTok{head}\NormalTok{(filtered.comments)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Bump checkstyle from 9.3 to 10.0 (#8544)"                                       
+## [2] "Support two argument form of \\abx\naux\ncite macro in DefaultAuxParser (#8549)"
+## [3] "Bump guava from 31.0.1-jre to 31.1-jre (#8543)"                                 
+## [4] "Bump org.beryx.jlink from 2.24.4 to 2.25.0 (#8548)"                             
+## [5] "Bump postgresql from 42.3.2 to 42.3.3 (#8546)"                                  
+## [6] "Bump richtextfx from 0.10.7 to 0.10.9 (#8547)"
+\end{verbatim}
+
+\hypertarget{problem-4}{%
+\subsubsection{Problem 4}\label{problem-4}}
+
+Find a pattern to match the patterns \texttt{fix\ exception}, knowing
+that the pattern may appear with or without the space between the words
+(e.g., \texttt{fixexception}) and both words \emph{may} begin with
+uppercase letter (e.g., \texttt{File\ Exception}). To do so:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  create a string \texttt{pattern} containing a regular expression
+  pattern to match the patterns described above;
+\item
+  check whether the pattern matches the comments and ave the result in
+  the \texttt{matches} variable;
+\item
+  count the number of titles that matched the regular expression;
+\item
+  lookup the \texttt{comments} selecting only the positions that have a
+  match, make sure you show the results.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pattern }\OtherTok{\textless{}{-}} \StringTok{"[Ff]ix ?[Ee]xception"}
+\NormalTok{matches }\OtherTok{\textless{}{-}} \FunctionTok{str\_detect}\NormalTok{(comments, pattern)}
+\NormalTok{filtered.comments }\OtherTok{\textless{}{-}}\NormalTok{ comments[matches]}
+\FunctionTok{head}\NormalTok{(filtered.comments)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Fix exception on preview style edit and selection (#8293)"        
+## [2] "Fix exception for search flags (#8237)"                           
+## [3] "Fix Exception on citation style selection"                        
+## [4] "Merge pull request #8092 from JabRef/fixExceptionInFullTextSearch"
+\end{verbatim}
+
+\hypertarget{problem-5}{%
+\subsubsection{Problem 5}\label{problem-5}}
+
+Locate the start and end positions of the matches for the following
+pattern:
+
+\begin{verbatim}
+- A single open parentheses character
+- A hashtag symbol
+- One or more digits (0-9)
+- A single close parentheses character
+\end{verbatim}
+
+Do the following: 1. create a string \texttt{pattern} containing a
+regular expression pattern to match the pattern described above; 2.
+create a variable named \texttt{match.comments} that stores only the
+comments that match the pattern; 3. use the
+\href{https://stringr.tidyverse.org/reference/str_locate.html}{\texttt{str\_locate()}}
+to locate the start and end positions of matches in
+\texttt{match.comments} and save the result in a variable named
+\texttt{positions}; 4. show the head and tail of the \texttt{positions}
+variable
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pattern }\OtherTok{\textless{}{-}} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{(\#[0{-}9]+}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{)"}
+\NormalTok{match.comments }\OtherTok{\textless{}{-}}\NormalTok{ comments[}\FunctionTok{str\_detect}\NormalTok{(comments, pattern)]}
+\NormalTok{positions }\OtherTok{\textless{}{-}} \FunctionTok{str\_locate}\NormalTok{(match.comments, pattern)}
+\FunctionTok{head}\NormalTok{(positions)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      start end
+## [1,]    20  26
+## [2,]   113 119
+## [3,]    35  41
+## [4,]    50  56
+## [5,]    54  60
+## [6,]    37  43
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tail}\NormalTok{(positions)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        start end
+## [222,]    39  45
+## [223,]    46  52
+## [224,]    25  31
+## [225,]    52  58
+## [226,]    41  47
+## [227,]    53  59
+\end{verbatim}
+
+\hypertarget{problem-6}{%
+\subsubsection{Problem 6}\label{problem-6}}
+
+Considering the pattern from \textbf{Problem 5}, use the
+\href{https://stringr.tidyverse.org/reference/str_extract.html}{\texttt{str\_extract()}}
+function to extract the pull request numbers from the
+\texttt{match.comments}. Store the results in a variable named
+\texttt{pr.numbers} and show the head and tail of the result.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pr.numbers }\OtherTok{\textless{}{-}} \FunctionTok{str\_extract}\NormalTok{(match.comments, pattern)}
+\FunctionTok{head}\NormalTok{(pr.numbers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "(#8623)" "(#8567)" "(#8620)" "(#8619)" "(#8618)" "(#8621)"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tail}\NormalTok{(pr.numbers)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "(#8164)" "(#8144)" "(#8124)" "(#8121)" "(#8110)" "(#8112)"
+\end{verbatim}
+
+\hypertarget{problem-7}{%
+\subsubsection{Problem 7}\label{problem-7}}
+
+Modifiy the pattern from \textbf{Problem 5} to capture the same pattern,
+but remove the parenthesis from the outcome. To do so:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  rewrite the \texttt{pattern} to include a capture group that leaves
+  the parentheses out;
+\item
+  create a variable named \texttt{match.comments} that stores only the
+  comments that match the pattern;
+\item
+  extract the pull request numbers from \texttt{match.comments} using
+  the
+  \href{https://stringr.tidyverse.org/reference/str_match.html}{\texttt{str\_match()}}
+  function. Store the results in a variable named \texttt{pr.numbers}
+  and show the head and tail of the second column of \texttt{pr.numbers}
+  only (shows only the values without the parentheses).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pattern }\OtherTok{\textless{}{-}} \StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{((\#[0{-}9]+)}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{)"}
+\NormalTok{match.comments }\OtherTok{\textless{}{-}}\NormalTok{ comments[}\FunctionTok{str\_detect}\NormalTok{(comments, pattern)]}
+\NormalTok{pr.numbers }\OtherTok{\textless{}{-}} \FunctionTok{str\_match}\NormalTok{(match.comments, pattern)}
+\FunctionTok{head}\NormalTok{(pr.numbers[,}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "#8623" "#8567" "#8620" "#8619" "#8618" "#8621"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tail}\NormalTok{(pr.numbers[,}\DecValTok{2}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "#8164" "#8144" "#8124" "#8121" "#8110" "#8112"
+\end{verbatim}
+
+\hypertarget{problem-8}{%
+\subsubsection{Problem 8}\label{problem-8}}
+
+Write a regular expression that match comments containing \texttt{up}
+for the following cases:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{pattern1}: the \texttt{up} string must be preceded by a word
+  boundary and end the string
+\item
+  \texttt{pattern2}: the \texttt{up} string must preceded and followed
+  by a word boundary, anywhere in the string
+\item
+  \texttt{pattern3}: the \texttt{up} string must begin the string but
+  not necessarily be followed by a word boundary
+\end{itemize}
+
+The regex should match whether or not the first character is
+capitalized. Use the
+\href{https://stringr.tidyverse.org/reference/str_detect.html}{\texttt{str\_detect()}}
+function to check whether each pattern matches the comments in
+\texttt{commits} and show the commit messages where the patterns were
+detected.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pattern1 }\OtherTok{\textless{}{-}} \StringTok{"}\SpecialCharTok{\textbackslash{}b}\StringTok{[Uu]p$"}
+\NormalTok{pattern2 }\OtherTok{\textless{}{-}} \StringTok{"}\SpecialCharTok{\textbackslash{}b}\StringTok{[Uu]p}\SpecialCharTok{\textbackslash{}b}\StringTok{"}
+\NormalTok{pattern3 }\OtherTok{\textless{}{-}} \StringTok{"\^{}[Uu]p"}
+\NormalTok{pattern }\OtherTok{\textless{}{-}} \FunctionTok{paste}\NormalTok{(pattern1, pattern2, pattern3, }\AttributeTok{sep=}\StringTok{"|"}\NormalTok{)}
+\NormalTok{comments[}\FunctionTok{str\_detect}\NormalTok{(comments, pattern)]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "update to lucence 9.1"                                                          
+##  [2] "Update gradle-wrapper.properties"                                               
+##  [3] "Update gradle-wrapper.properties"                                               
+##  [4] "Update CHANGELOG.md"                                                            
+##  [5] "Update JabRef_Main.xml"                                                         
+##  [6] "update test getPart (#8610)"                                                    
+##  [7] "Update citeproc to fix CSL render exceptions (#8532)"                           
+##  [8] "Update Gradle Wrapper from 7.4 to 7.4.1. (#8565)"                               
+##  [9] "Update RemoteSetupTest.java, adding eq() function from mockito (#8561)"         
+## [10] "Update to jakarta xml everywhere and update PDFbox (#8521)"                     
+## [11] "Update Gradle Wrapper from 7.3.3 to 7.4. (#8499)"                               
+## [12] "Upgrade to jdk 17 (#8433)"                                                      
+## [13] "Update FUNDING.yml (#8473)"                                                     
+## [14] "Update to Javafx 17.02 (#8470)"                                                 
+## [15] "update snap url"                                                                
+## [16] "Update bug_report.yml for 5.5"                                                  
+## [17] "Update journal abbrev list"                                                     
+## [18] "Update turabian-fullnote-bibliography-no-ibid.csl"                              
+## [19] "Update Gradle Wrapper from 7.3.2 to 7.3.3. (#8363)"                             
+## [20] "Upgrade lucence to 9.x with proper JPMS"                                        
+## [21] "Update bug_report.yml"                                                          
+## [22] "Update snapcraft portable download link"                                        
+## [23] "Update journal abbrev list (#8350)"                                             
+## [24] "Update deps"                                                                    
+## [25] "Update Gradle Wrapper from 7.3.1 to 7.3.2. (#8343)"                             
+## [26] "Update Controlsfx to 11.1.1 (#8330)"                                            
+## [27] "Update citeproc (#8329)"                                                        
+## [28] "Update Gradle Wrapper from 7.3 to 7.3.1. (#8299)"                               
+## [29] "Update deployment.yml"                                                          
+## [30] "Update Gradle Wrapper from 7.2 to 7.3 (#8246)"                                  
+## [31] "Updata javafx to 17.0.1"                                                        
+## [32] "Update src/main/java/org/jabref/gui/preferences/linkedfiles/LinkedFilesTab.java"
+## [33] "Update src/main/java/org/jabref/gui/preferences/linkedfiles/LinkedFilesTab.fxml"
+## [34] "Update CHANGELOG.md"                                                            
+## [35] "update prototype"                                                               
+## [36] "Update CHANGELOG.md"                                                            
+## [37] "Update gradle.properties"                                                       
+## [38] "Update gradle.properties"                                                       
+## [39] "update to 4g"                                                                   
+## [40] "Update to javafx 17"                                                            
+## [41] "Update StateManager.java"
+\end{verbatim}
+
+\hypertarget{problem-9}{%
+\subsubsection{Problem 9}\label{problem-9}}
+
+Find a regular expression that match comments with a pattern similar to
+the following:
+
+\begin{verbatim}
+/net.bytebuddy-byte-buddy-parent-1.12.0
+/org.antlr-antlr4-runtime-4.9.3
+/com.konghq-unirest-java-3.13.3
+/io.github.classgraph-classgraph-4.8.130
+/org.fxmisc.flowless-flowless-0.6.7
+/com.adarshr.test-logger-3.1.0
+/com.tngtech.archunit-archunit-junit5-engine-0.22.0
+/io.github.classgraph-classgraph-4.8.129
+/org.xmlunit-xmlunit-matchers-2.8.3
+/org.jsoup-jsoup-1.14.3
+/net.bytebuddy-byte-buddy-parent-1.11.21
+/org.libreoffice-libreoffice-7.2.2   
+...
+\end{verbatim}
+
+Notice that all the strings:
+
+\begin{itemize}
+\tightlist
+\item
+  start with a slash
+\item
+  contains a 2-3 letters followed by a dot
+\item
+  after the first dot, there can be one or more sets of letters and/or
+  numbers followed by a dash (-) or another dot (.)
+\item
+  the list above is not comprehensive (in fact there are 39 comments
+  that should match the pattern)
+\end{itemize}
+
+Do the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  write the pattern in a \texttt{pattern} variable;
+\item
+  check how may matches can be found in the \texttt{comments} array;
+\item
+  use the
+  \href{https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/grep}{\texttt{grep()}}
+  function to find the position where the matches are located. Store the
+  result in a variable named \texttt{pos};
+\item
+  replace the matches in the \texttt{comments} array with the string
+  \texttt{"/ANONYMOUS"}. Attribute the result back to the
+  \texttt{comments} array;
+\item
+  lookup the \texttt{comments} selecting only the positions stored in
+  the variable \texttt{pos}.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pattern }\OtherTok{\textless{}{-}} \StringTok{"/[a{-}z]\{2,3\}}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.[a{-}z0{-}9}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.{-}]*"}
+\CommentTok{\# comments[str\_detect(comments, pattern)]}
+\NormalTok{pos }\OtherTok{\textless{}{-}} \FunctionTok{grep}\NormalTok{(pattern, comments)}
+\NormalTok{comments }\OtherTok{\textless{}{-}} \FunctionTok{str\_replace}\NormalTok{(comments, pattern, }\StringTok{"/ANONYMOUS"}\NormalTok{)}
+\NormalTok{comments[pos]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "Merge pull request #8223 from JabRef/dependabot/gradle/ANONYMOUS"
+##  [2] "Merge pull request #8224 from JabRef/dependabot/gradle/ANONYMOUS"
+##  [3] "Merge pull request #8225 from JabRef/dependabot/gradle/ANONYMOUS"
+##  [4] "Merge pull request #8221 from JabRef/dependabot/gradle/ANONYMOUS"
+##  [5] "Merge pull request #8219 from JabRef/dependabot/gradle/ANONYMOUS"
+##  [6] "Merge pull request #8222 from JabRef/dependabot/gradle/ANONYMOUS"
+##  [7] "Merge pull request #8220 from JabRef/dependabot/gradle/ANONYMOUS"
+##  [8] "Merge pull request #8205 from JabRef/dependabot/gradle/ANONYMOUS"
+##  [9] "Merge pull request #8186 from JabRef/dependabot/gradle/ANONYMOUS"
+## [10] "Merge pull request #8187 from JabRef/dependabot/gradle/ANONYMOUS"
+## [11] "Merge pull request #8185 from JabRef/dependabot/gradle/ANONYMOUS"
+## [12] "Merge pull request #8183 from JabRef/dependabot/gradle/ANONYMOUS"
+## [13] "Merge pull request #8184 from JabRef/dependabot/gradle/ANONYMOUS"
+## [14] "Merge pull request #8162 from JabRef/dependabot/gradle/ANONYMOUS"
+## [15] "Merge pull request #8163 from JabRef/dependabot/gradle/ANONYMOUS"
+## [16] "Merge pull request #8136 from JabRef/dependabot/gradle/ANONYMOUS"
+## [17] "Merge pull request #8139 from JabRef/dependabot/gradle/ANONYMOUS"
+## [18] "Merge pull request #8138 from JabRef/dependabot/gradle/ANONYMOUS"
+## [19] "Merge pull request #8137 from JabRef/dependabot/gradle/ANONYMOUS"
+## [20] "Merge pull request #8118 from JabRef/dependabot/gradle/ANONYMOUS"
+## [21] "Merge pull request #8117 from JabRef/dependabot/gradle/ANONYMOUS"
+## [22] "Merge pull request #8119 from JabRef/dependabot/gradle/ANONYMOUS"
+## [23] "Merge pull request #8120 from JabRef/dependabot/gradle/ANONYMOUS"
+## [24] "Merge pull request #8116 from JabRef/dependabot/gradle/ANONYMOUS"
+## [25] "Merge pull request #8099 from JabRef/dependabot/gradle/ANONYMOUS"
+## [26] "Merge pull request #8097 from JabRef/dependabot/gradle/ANONYMOUS"
+## [27] "Merge pull request #8101 from JabRef/dependabot/gradle/ANONYMOUS"
+## [28] "Merge pull request #8098 from JabRef/dependabot/gradle/ANONYMOUS"
+## [29] "Merge pull request #8102 from JabRef/dependabot/gradle/ANONYMOUS"
+## [30] "Merge pull request #8103 from JabRef/dependabot/gradle/ANONYMOUS"
+## [31] "Merge pull request #8100 from JabRef/dependabot/gradle/ANONYMOUS"
+## [32] "Merge pull request #8088 from JabRef/dependabot/gradle/ANONYMOUS"
+## [33] "Merge pull request #8090 from JabRef/dependabot/gradle/ANONYMOUS"
+## [34] "Merge pull request #8089 from JabRef/dependabot/gradle/ANONYMOUS"
+## [35] "Merge pull request #8083 from JabRef/dependabot/gradle/ANONYMOUS"
+## [36] "Merge pull request #8062 from JabRef/dependabot/gradle/ANONYMOUS"
+## [37] "Merge pull request #8063 from JabRef/dependabot/gradle/ANONYMOUS"
+## [38] "Merge pull request #8064 from JabRef/dependabot/gradle/ANONYMOUS"
+## [39] "Merge pull request #8065 from JabRef/dependabot/gradle/ANONYMOUS"
+\end{verbatim}
+
+\hypertarget{problem-10}{%
+\subsubsection{Problem 10}\label{problem-10}}
+
+Find a regular expression that matches pull request numbers, which
+starts with a \# and it is followed by a set of numbers. For example,
+\(\#8590\) is a pull request number. Then, do the following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  write your pattern in a \texttt{pattern} variable;
+\item
+  use the
+  \href{https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/grep}{\texttt{grep()}}
+  function to find the position where the matches are located. Store the
+  result in a variable named \texttt{pos};
+\item
+  split the \texttt{comments} in the \texttt{pos} positions by the
+  \texttt{pattern}. Use the \texttt{simplify=TRUE} option. Attribute the
+  result to a variable named \texttt{split.comments};
+\item
+  show the first column of the \texttt{split.comments} array.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{pattern }\OtherTok{\textless{}{-}} \StringTok{"\#[0{-}9]+"}
+\NormalTok{pos }\OtherTok{\textless{}{-}} \FunctionTok{grep}\NormalTok{(pattern, comments)}
+\NormalTok{split.comments }\OtherTok{\textless{}{-}} \FunctionTok{str\_split}\NormalTok{(comments[pos], pattern, }\AttributeTok{simplify =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{split.comments[,}\DecValTok{1}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1] "Fix zbMath fetcher ("                                                                                                       
+##   [2] "GitBook: ["                                                                                                                 
+##   [3] "Add an extra dialog to ask the user whether they want to open the saved file folder when the export the entries ("          
+##   [4] "Bump checkstyle from 10.0 to 10.1 ("                                                                                        
+##   [5] "Bump peter-evans/create-pull-request from 3 to 4 ("                                                                         
+##   [6] "Bump pascalgn/automerge-action from 0.14.3 to 0.15.2 ("                                                                     
+##   [7] "Bump flexmark from 0.62.2 to 0.64.0 ("                                                                                      
+##   [8] "Bump classgraph from 4.8.141 to 4.8.143 ("                                                                                  
+##   [9] "update test getPart ("                                                                                                      
+##  [10] "Add ControlHelper truncateString tests comments ("                                                                          
+##  [11] "Allow using custom SSL certificates ("                                                                                      
+##  [12] "Fix protectedTerms not stored due to weaklistener ("                                                                        
+##  [13] "Fix changelog and version parsing ("                                                                                        
+##  [14] "Creating more unit tests for NumericFieldComparatorTest ("                                                                  
+##  [15] "Fix merge entries dialog exceeding screen size ("                                                                           
+##  [16] "StringUtilTest new test for method GetPart ("                                                                               
+##  [17] "Add semantic scholar ("                                                                                                     
+##  [18] "Add research gate ("                                                                                                        
+##  [19] "fix import of unlinked files ("                                                                                             
+##  [20] "Missed l10n for fetcher fix ("                                                                                              
+##  [21] "Fix some fetcher test ("                                                                                                    
+##  [22] "Bump slf4j-api from 2.0.0-alpha6 to 2.0.0-alpha7 in /buildSrc ("                                                            
+##  [23] "Bump ikonli-materialdesign2-pack from 12.3.0 to 12.3.1 ("                                                                   
+##  [24] "Bump gittools/actions from 0.9.11 to 0.9.13 ("                                                                              
+##  [25] "Bump mockito-core from 4.3.1 to 4.4.0 ("                                                                                    
+##  [26] "Bump flowless from 0.6.8 to 0.6.9 ("                                                                                        
+##  [27] "Bump ikonli-javafx from 12.3.0 to 12.3.1 ("                                                                                 
+##  [28] "Bump unirest-java from 3.13.6 to 3.13.7 ("                                                                                  
+##  [29] "Fix missing search index dir ("                                                                                             
+##  [30] "Bump JavaFX from 17.0.2 to 18 ("                                                                                            
+##  [31] "Resolve File Creation Issue With Medline/PubMed ("                                                                          
+##  [32] "Merge pull request "                                                                                                        
+##  [33] "Update citeproc to fix CSL render exceptions ("                                                                             
+##  [34] "Fix medline import due to mising module ("                                                                                  
+##  [35] "Bump jackson-dataformat-yaml from 2.13.1 to 2.13.2 ("                                                                       
+##  [36] "Update Gradle Wrapper from 7.4 to 7.4.1. ("                                                                                 
+##  [37] "Bump org.eclipse.jgit from 6.0.0.202111291000-r to 6.1.0.202203080745-r ("                                                  
+##  [38] "Bump jackson-datatype-jsr310 from 2.13.1 to 2.13.2 ("                                                                       
+##  [39] "Bump libreoffice from 7.3.0 to 7.3.1 ("                                                                                     
+##  [40] "Bump com.adarshr.test-logger from 3.1.0 to 3.2.0 ("                                                                         
+##  [41] "Update RemoteSetupTest.java, adding eq() function from mockito ("                                                           
+##  [42] "Open office refactor finalization (formerly OObranch J cleanup) ("                                                          
+##  [43] "Revert Refine documentation ("                                                                                              
+##  [44] "Refine documentation on logging ("                                                                                          
+##  [45] "Revert Refine documentation ("                                                                                              
+##  [46] "Refine documentation ("                                                                                                     
+##  [47] "New Crowdin updates ("                                                                                                      
+##  [48] "New Crowdin updates ("                                                                                                      
+##  [49] "Fix missing metadata in BibDatabaseContext ("                                                                               
+##  [50] "Add encoding detection (and pin export to UTF-8) ("                                                                         
+##  [51] "Add Missing Fillers/Extractors for Supported Fields and Support Day Conversion ("                                           
+##  [52] "Bump checkstyle from 9.3 to 10.0 ("                                                                                         
+##  [53] "Fix online link detection in entry editor ("                                                                                
+##  [54] "Support two argument form of \\abx\naux\ncite macro in DefaultAuxParser ("                                                  
+##  [55] "Bump guava from 31.0.1-jre to 31.1-jre ("                                                                                   
+##  [56] "Bump org.beryx.jlink from 2.24.4 to 2.25.0 ("                                                                               
+##  [57] "Bump postgresql from 42.3.2 to 42.3.3 ("                                                                                    
+##  [58] "Bump richtextfx from 0.10.7 to 0.10.9 ("                                                                                    
+##  [59] "Bump archunit-junit5-engine from 0.22.0 to 0.23.1 ("                                                                        
+##  [60] "Bump actions/checkout from 2 to 3 ("                                                                                        
+##  [61] "Merge pull request "                                                                                                        
+##  [62] "Bump classgraph from 4.8.139 to 4.8.141 ("                                                                                  
+##  [63] "Bump archunit-junit5-api from 0.22.0 to 0.23.1 ("                                                                           
+##  [64] "issue(8448): allow URL with + sign in entry tabs ("                                                                         
+##  [65] "Add initial telemetry development documentation ("                                                                          
+##  [66] "Disable telemetry client due to incompatibilites with jakarta ("                                                            
+##  [67] "Update to jakarta xml everywhere and update PDFbox ("                                                                       
+##  [68] "Bump flexmark-ext-gfm-tasklist from 0.62.2 to 0.64.0 ("                                                                     
+##  [69] "Bump xmlunit-core from 2.8.4 to 2.9.0 ("                                                                                    
+##  [70] "Bump org.openjfx.javafxplugin from 0.0.11 to 0.0.12 ("                                                                      
+##  [71] "Bump mockito-core from 4.3.0 to 4.3.1 ("                                                                                    
+##  [72] "Revert Fix for Indexing stopping while having library modification ("                                                       
+##  [73] "Fix for Indexing stopping while having library modification ("                                                              
+##  [74] "Merge pull request "                                                                                                        
+##  [75] "Update Gradle Wrapper from 7.3.3 to 7.4. ("                                                                                 
+##  [76] "Bump flexmark-ext-gfm-strikethrough from 0.62.2 to 0.64.0 ("                                                                
+##  [77] "Bump tika-core from 2.2.1 to 2.3.0 ("                                                                                       
+##  [78] "Bump classgraph from 4.8.138 to 4.8.139 ("                                                                                  
+##  [79] "Fix for opening console on active database ("                                                                               
+##  [80] "Bump unoloader from 7.2.5 to 7.3.0 ("                                                                                       
+##  [81] "Bump flowless from 0.6.7 to 0.6.8 ("                                                                                        
+##  [82] "Bump libreoffice from 7.2.5 to 7.3.0 ("                                                                                     
+##  [83] "Bump postgresql from 42.3.1 to 42.3.2 ("                                                                                    
+##  [84] "Merge pull request "                                                                                                        
+##  [85] "Introduce preference to disable fulltext indexing ("                                                                        
+##  [86] "Upgrade to jdk 17 ("                                                                                                        
+##  [87] "Fix for DOI copy issues ("                                                                                                  
+##  [88] "Bump xmlunit-matchers from 2.8.4 to 2.9.0 ("                                                                                
+##  [89] "Bump checkstyle from 9.2.1 to 9.3 ("                                                                                        
+##  [90] "Fixsomefetchers ("                                                                                                          
+##  [91] "Observable Preferences K (Integration of wild preferences) ("                                                               
+##  [92] "Potential fix for Library tab issue ("                                                                                      
+##  [93] "Support CrossRef in CSL styles ("                                                                                           
+##  [94] "Update FUNDING.yml ("                                                                                                       
+##  [95] "Update to Javafx 17.02 ("                                                                                                   
+##  [96] "Made search button in Web search wider. Also skewed side panel titles to the left ("                                        
+##  [97] "Bump h2-mvstore from 2.0.206 to 2.1.210 in /buildSrc ("                                                                     
+##  [98] "Bump mariadb-java-client from 2.7.4 to 2.7.5 ("                                                                             
+##  [99] "Bump com.github.andygoossens.modernizer from 1.6.1 to 1.6.2 ("                                                              
+## [100] "Bump mockito-core from 4.2.0 to 4.3.0 ("                                                                                    
+## [101] "Bump xmlunit-matchers from 2.8.3 to 2.8.4 ("                                                                                
+## [102] "Improve error handling for browser extension ("                                                                             
+## [103] "New Crowdin updates ("                                                                                                      
+## [104] "Fix library tab exception when saving prefs ("                                                                              
+## [105] "Rename Groups interface into Groups ("                                                                                      
+## [106] "New Crowdin updates ("                                                                                                      
+## [107] "Merge pull request "                                                                                                        
+## [108] "Merge pull request "                                                                                                        
+## [109] "New Crowdin updates ("                                                                                                      
+## [110] "Fixed add group button changing color after adding 10 groups ("                                                             
+## [111] "Bump slf4j-api from 2.0.0-alpha5 to 2.0.0-alpha6 in /buildSrc ("                                                            
+## [112] "Bump libreoffice from 7.2.3 to 7.2.5 ("                                                                                     
+## [113] "Bump org.openjfx.javafxplugin from 0.0.10 to 0.0.11 ("                                                                      
+## [114] "Fix file directory preferences not respected ("                                                                             
+## [115] "Merge pull request "                                                                                                        
+## [116] "Add roundtrip test ("                                                                                                       
+## [117] "% Encoding\" is written again in the case of non-UTF-8 ("                                                                   
+## [118] "Change default behavior of resolve bibtex strings ("                                                                        
+## [119] "Fixed duplicate fields assigned to entry types ("                                                                           
+## [120] "Bump unoloader from 7.2.2 to 7.2.5 ("                                                                                       
+## [121] "Bump checkstyle from 9.2 to 9.2.1 ("                                                                                        
+## [122] "Bump unirest-java from 3.13.4 to 3.13.6 ("                                                                                  
+## [123] "Bump h2-mvstore from 2.0.204 to 2.0.206 ("                                                                                  
+## [124] "Bump ikonli-materialdesign2-pack from 12.2.0 to 12.3.0 ("                                                                   
+## [125] "Bump ikonli-javafx from 12.2.0 to 12.3.0 ("                                                                                 
+## [126] "Improve code comments ("                                                                                                    
+## [127] "Fix plural s in library properties tab ("                                                                                   
+## [128] "Fix lucence segment error by checking for existing index ("                                                                 
+## [129] "Observable Preferences J (Preview) and minor refactor ("                                                                    
+## [130] "quickfix ("                                                                                                                 
+## [131] "Live reloading when switching themes ("                                                                                     
+## [132] "FIX NPE on Merge Dialog ("                                                                                                  
+## [133] "Bump org.eclipse.jgit from 5.13.0.202109080827-r to 6.0.0.202111291000-r ("                                                 
+## [134] "Bump jackson-dataformat-yaml from 2.13.0 to 2.13.1 ("                                                                       
+## [135] "Bump tika-core from 2.2.0 to 2.2.1 ("                                                                                       
+## [136] "Merge pull request "                                                                                                        
+## [137] "Bump jackson-datatype-jsr310 from 2.13.0 to 2.13.1 ("                                                                       
+## [138] "Bump xmpbox from 2.0.24 to 2.0.25 ("                                                                                        
+## [139] "Bump mockito-core from 4.1.0 to 4.2.0 ("                                                                                    
+## [140] "Bump h2-mvstore from 2.0.202 to 2.0.204 ("                                                                                  
+## [141] "Update Gradle Wrapper from 7.3.2 to 7.3.3. ("                                                                               
+## [142] "Observable preferences I (Internal [formerly Version], Groups, Xmp, AutoComplete) ("                                        
+## [143] "Changed encoding used by IntegrityCheck ("                                                                                  
+## [144] "Fixes empty metadata in library properties called from right click menu ("                                                  
+## [145] "Fix NPE when clicking on preview ("                                                                                         
+## [146] "Integrated CustomizeExternalFileTypesDialog into Preferences ("                                                             
+## [147] "[Bot] Update CSL styles ("                                                                                                  
+## [148] "Update journal abbrev list ("                                                                                               
+## [149] "New Crowdin updates ("                                                                                                      
+## [150] "Bump pdfbox from 2.0.24 to 2.0.25 ("                                                                                        
+## [151] "Bump fontbox from 2.0.24 to 2.0.25 ("                                                                                       
+## [152] "Bump xmlunit-core from 2.8.3 to 2.8.4 ("                                                                                    
+## [153] "Bump tika-core from 2.1.0 to 2.2.0 ("                                                                                       
+## [154] "Added missing executable bindings to various commands ("                                                                    
+## [155] "Update Gradle Wrapper from 7.3.1 to 7.3.2. ("                                                                               
+## [156] "Fix issues with writing metadata to pdfs ("                                                                                 
+## [157] "add tinylog test ("                                                                                                         
+## [158] "Tinylog ("                                                                                                                  
+## [159] "Don't register any database changes to the indexer while dropping a file ("                                                 
+## [160] "Fix ACM fetcher ("                                                                                                          
+## [161] "Merge pull request "                                                                                                        
+## [162] "Exception shouldn't happen when pasting an entry with a publication date-range of form yyyy-yyyy ("                         
+## [163] "Refactor Sidepane logic ("                                                                                                  
+## [164] "New translations JabRef_en.properties (Japanese) ("                                                                         
+## [165] "Bump bcprov-jdk15on from 1.69 to 1.70 ("                                                                                    
+## [166] "Update Controlsfx to 11.1.1 ("                                                                                              
+## [167] "Update citeproc ("                                                                                                          
+## [168] "Bump classgraph from 4.8.137 to 4.8.138 ("                                                                                  
+## [169] "Bump junit-platform-launcher from 1.8.1 to 1.8.2 ("                                                                         
+## [170] "Remove outdated gradle deps check ("                                                                                        
+## [171] "Bump junit-jupiter from 5.8.1 to 5.8.2 ("                                                                                   
+## [172] "Bump libreoffice from 7.2.2 to 7.2.3 ("                                                                                     
+## [173] "New translations JabRef_en.properties (Turkish) ("                                                                          
+## [174] "snap: Remove superfluous files post build ("                                                                                
+## [175] "Fix IEEE test ("                                                                                                            
+## [176] "New translations JabRef_en.properties (German) ("                                                                           
+## [177] "Fixed exception handling ("                                                                                                 
+## [178] "New Crowdin updates ("                                                                                                      
+## [179] "Fix xmp import ("                                                                                                           
+## [180] "New Crowdin updates ("                                                                                                      
+## [181] "Fix file-filter in XMP Export ("                                                                                            
+## [182] "New Crowdin updates ("                                                                                                      
+## [183] "Bump h2-mvstore from 1.4.200 to 2.0.202 ("                                                                                  
+## [184] "Remove bytebuddy ("                                                                                                         
+## [185] "Bump postgresql from 42.2.24 to 42.3.1 ("                                                                                   
+## [186] "Update Gradle Wrapper from 7.3 to 7.3.1. ("                                                                                 
+## [187] "Apply search string to open library when keep search string is selected ("                                                  
+## [188] "Fix exception on preview style edit and selection ("                                                                        
+## [189] "Fix icon picker excpetion in groups dialog ("                                                                               
+## [190] "Merge pull request "                                                                                                        
+## [191] "Add doc tests ("                                                                                                            
+## [192] "Consider directory pattern when checking if a file can be moved ("                                                          
+## [193] "Bump byte-buddy-parent from 1.12.1 to 1.12.2 ("                                                                             
+## [194] "Bump unirest-java from 3.13.3 to 3.13.4 ("                                                                                  
+## [195] "Bump checkstyle from 9.1 to 9.2 ("                                                                                          
+## [196] "Bump classgraph from 4.8.135 to 4.8.137 ("                                                                                  
+## [197] "Do not resize main table columns in search dialog window ("                                                                 
+## [198] "Fix NegativeArraySizeException ("                                                                                           
+## [199] "Grand unified library properties (GRULPS) ("                                                                                
+## [200] "Fixes RFC fetcher test case ("                                                                                              
+## [201] "Update Gradle Wrapper from 7.2 to 7.3 ("                                                                                    
+## [202] "Observable Preferences H (WorkingDir, getUser, NameFormatter, Version, SpecialFields) ("                                    
+## [203] "Bump checkstyle from 9.0.1 to 9.1 ("                                                                                        
+## [204] "Bump mockito-core from 4.0.0 to 4.1.0 ("                                                                                    
+## [205] "Bump classgraph from 4.8.130 to 4.8.135 ("                                                                                  
+## [206] "Fix some fetcher tests ("                                                                                                   
+## [207] "Clicking a DOI link in the preview pane no longer crashes ("                                                                
+## [208] "Add of ADRs 22 and 23 ("                                                                                                    
+## [209] "[Bot] Update CSL styles ("                                                                                                  
+## [210] "Replace styfle/cancel-workflow-action\n0.9.1 by GitHub's concurrency\" feature ("                                           
+## [211] "Bump gittools/actions from 0.9.10 to 0.9.11 ("                                                                              
+## [212] "Bump commons-cli from 1.4 to 1.5.0 ("                                                                                       
+## [213] "Bump byte-buddy-parent from 1.12.0 to 1.12.1 ("                                                                             
+## [214] "Bump antlr4 from 4.9.2 to 4.9.3 ("                                                                                          
+## [215] "Bump archunit-junit5-api from 0.21.0 to 0.22.0 ("                                                                           
+## [216] "Fix search: NOT binds more than AND ("                                                                                      
+## [217] "New Crowdin updates ("                                                                                                      
+## [218] "Oobranch g : add actions ("                                                                                                 
+## [219] "Fix mixed CRLF / CR ("                                                                                                      
+## [220] "Fix Library has changed externally\" with CRLF markers ("                                                                   
+## [221] "Fix for issue 8198, 8133 ("                                                                                                 
+## [222] "Added more unit tests in AuthorTest ("                                                                                      
+## [223] "Add confirmation dialog for empty entries in JabRef ("                                                                      
+## [224] "Fix entry editor column visibility ("                                                                                       
+## [225] "Use regexp to remove non-ASCII characters from DOI and inform user when data for valid DOI does not exist "                 
+## [226] "Fix exception for search flags ("                                                                                           
+## [227] "Merge pull request "                                                                                                        
+## [228] "Merge pull request "                                                                                                        
+## [229] "Merge pull request "                                                                                                        
+## [230] "Merge pull request "                                                                                                        
+## [231] "Merge pull request "                                                                                                        
+## [232] "Merge pull request "                                                                                                        
+## [233] "Merge pull request "                                                                                                        
+## [234] "Merge pull request "                                                                                                        
+## [235] "Merge pull request "                                                                                                        
+## [236] "Present options to create an article for manual entry or return to the new entry dialog box when failed to find DOI ID ... "
+## [237] "Merge pull request "                                                                                                        
+## [238] "Merge pull request "                                                                                                        
+## [239] "Merge pull request "                                                                                                        
+## [240] "Merge pull request "                                                                                                        
+## [241] "[Bot] Update CSL styles ("                                                                                                  
+## [242] "Merge pull request "                                                                                                        
+## [243] "Merge pull request "                                                                                                        
+## [244] "Close the tab that the cursor is on when right-clicking and selecting close ("                                              
+## [245] "Merge pull request "                                                                                                        
+## [246] "Merge pull request "                                                                                                        
+## [247] "Fix add button is disabled when trying to add a new field to an entry type ("                                               
+## [248] "Merge pull request "                                                                                                        
+## [249] "Merge pull request "                                                                                                        
+## [250] "Merge pull request "                                                                                                        
+## [251] "Merge pull request "                                                                                                        
+## [252] "Merge pull request "                                                                                                        
+## [253] "Merge pull request "                                                                                                        
+## [254] "Merge pull request "                                                                                                        
+## [255] "Merge pull request "                                                                                                        
+## [256] "Merge pull request "                                                                                                        
+## [257] "Merge pull request "                                                                                                        
+## [258] "Observable preferences E (FilePreferences) ("                                                                               
+## [259] "Merge pull request "                                                                                                        
+## [260] "Fix some typos ("                                                                                                           
+## [261] "Removed two unused preference options ("                                                                                    
+## [262] "Merge pull request "                                                                                                        
+## [263] "Merge pull request "                                                                                                        
+## [264] "Merge pull request "                                                                                                        
+## [265] "Merge pull request "                                                                                                        
+## [266] "Merge pull request "                                                                                                        
+## [267] "GitBook: ["                                                                                                                 
+## [268] "Merge pull request "                                                                                                        
+## [269] "Merge pull request "                                                                                                        
+## [270] "Check if online file before downloading link ("                                                                             
+## [271] "Merge pull request "                                                                                                        
+## [272] "Merge pull request "                                                                                                        
+## [273] "Merge pull request "                                                                                                        
+## [274] "Merge pull request "                                                                                                        
+## [275] "Merge pull request "                                                                                                        
+## [276] "Merge pull request "                                                                                                        
+## [277] "Add Tests to DoiCleanup ("                                                                                                  
+## [278] "Improve Drag and Drop in Custom Entry types dialog ("                                                                       
+## [279] " Show preview also for available styles ("                                                                                  
+## [280] "Merge pull request "                                                                                                        
+## [281] "Don't throw exception when validating invalid paths ("                                                                      
+## [282] "Merge pull request "                                                                                                        
+## [283] "Merge pull request "                                                                                                        
+## [284] "Merge pull request "                                                                                                        
+## [285] "Merge pull request "                                                                                                        
+## [286] "Merge pull request "                                                                                                        
+## [287] "Merge pull request "                                                                                                        
+## [288] "Merge pull request "                                                                                                        
+## [289] "Merge pull request "                                                                                                        
+## [290] "Merge pull request "                                                                                                        
+## [291] "Merge pull request "                                                                                                        
+## [292] "Merge pull request "                                                                                                        
+## [293] "Merge pull request "                                                                                                        
+## [294] "Merge pull request "                                                                                                        
+## [295] "Merge pull request "                                                                                                        
+## [296] "Merge pull request "                                                                                                        
+## [297] "Merge pull request "                                                                                                        
+## [298] "Merge pull request "                                                                                                        
+## [299] "Merge pull request "                                                                                                        
+## [300] "Merge pull request "                                                                                                        
+## [301] "Merge pull request "                                                                                                        
+## [302] "Merge pull request "                                                                                                        
+## [303] "Merge pull request "                                                                                                        
+## [304] "Merge pull request "                                                                                                        
+## [305] "Merge pull request "                                                                                                        
+## [306] "Merge pull request "                                                                                                        
+## [307] "Merge pull request "                                                                                                        
+## [308] "Merge pull request "                                                                                                        
+## [309] "Merge pull request "                                                                                                        
+## [310] "Merge pull request "                                                                                                        
+## [311] "Merge pull request "                                                                                                        
+## [312] "Merge pull request "                                                                                                        
+## [313] "Merge pull request "                                                                                                        
+## [314] "Merge pull request "                                                                                                        
+## [315] "Merge pull request "                                                                                                        
+## [316] "Merge pull request "                                                                                                        
+## [317] "Merge pull request "                                                                                                        
+## [318] "Merge pull request "                                                                                                        
+## [319] "Merge pull request "                                                                                                        
+## [320] "Merge pull request "
+\end{verbatim}
+
+\end{document}

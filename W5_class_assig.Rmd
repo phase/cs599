@@ -1,0 +1,155 @@
+---
+title: "W5 In-class practice"
+author: "Jadon Fowler jaf582 5778191"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instructions
+
+Download a copy of this markdown. Change the `author: ` tag above to have your name and NAU's ID. Fill in the chunks with your R code that solves the problem. Knit your final document into a HTML file and submit it through BBLearn in the assignment **[In-class] JSON** before the end of the day (**Thursday, Sep 29, 11:59 PM**).
+
+If you're using any libraries to run your code, please load them here.
+
+```{r load_libraries, echo=FALSE, message=FALSE}
+library(jsonlite)   # you will need this for the date conversion (problem 3)
+library(lubridate)
+library(ggplot2)
+library(tidyverse)
+```
+
+### Problem 1
+
+Download the `.json` file attached to this assignment. Write an R code that imports the file into a proper file handler. Use the parameter `simplifyVector = TRUE` (this will coerce the arrays with primitive types into atomic vectors. The variable used to store the json must be named `earthquake`. Use the `print()` function to explore the content of the file. Then, print the names of the keys in the first level of the `earthquake`.
+
+```{r}
+# write your code here
+earthquake <- fromJSON("earthquake.json", simplifyVector = T)
+print(earthquake)
+names(earthquake)
+```
+
+### Problem 2
+
+As you noticed, the `earthquake` data stores information on earthquakes that happened between January and February of 2022, according to the United States Geological Survey ([USGS](https://www.usgs.gov/)). Try to explore the data a little bit. Can you tell in which key the main data is stored? Show the code you used to find the answer and explain your reasoning. Additional documentation about this file is available at the [USGS API](https://earthquake.usgs.gov/fdsnws/event/1/) documentation.
+
+
+`earthquake$features` contains the main features.
+
+```{r}
+#write your code here
+head(earthquake$features)
+```
+
+### Problem 3
+
+Although the dataset has many interesting information on the earthquakes, we are mainly interested in the following: `place` where the earthquake occurred, the date when it occurred (expressed in `time` and stored in milliseconds--ISO8601 format), the `magnitude`, and whether or not it caused a `tsunami`. We want to create a dataframe that has only these columns. Below you'll find an excerpt of the the file that show how this data is stored:
+
+```
+"features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "mag": 6.2,
+        "place": "66 km E of Hualien City, Taiwan",
+        "time": 1641203195767,
+        ...
+        "tsunami": 0,
+        ...
+```
+
+  a. Create four variables to store the arrays with the data we're interested in. Name these variables as `place`, `date`, `magnitude`, and `tsunami`. Use the `earthquake$...` syntax to find the data we want and attribute the values to each variable. At the end of this step, each variable must be a vector with 28 observations each.
+
+```{r}
+# write your code here
+place <- earthquake$features$properties$place
+date <- earthquake$features$properties$time
+magnitude <- earthquake$features$properties$mag
+tsunami <- earthquake$features$properties$tsunami
+```
+
+  b. Create a dataframe with the four variables from the previous step. Because the four variables are atomic arrays, you can `cbind` them into a dataframe. Your dataframe must be named `eq.df`.
+    
+```{r}
+# write your code here
+eq.df <- data.frame(cbind(
+  place, date, magnitude, tsunami
+))
+```
+
+  c. Check the structure of you new dataframe (`eq.df`). There are two important changes we need to make in this dataframe. The first (and easier) one is to change the `tsunami` data type from numeric to factor (where the numbers 0 and 1 stands for the categories False/True, respectively).
+  The second one is trickier. To make `date` more readable, we need to transform it into a `Date` type. ISO 8601 format includes date, time and timezone (the default is UTC) but we are not interested in these data, we want to know the date only. Here is what you're going to do:
+  
+  + the values in `date` are in milliseconds. The function we'll use takes in values in seconds. Thus, the first step is to divide `date` by `1000`, so that we have the values in seconds;
+  + call the function `as_datetime()` from the `lubridate` package to convert the date in seconds to date-time-timezone format;
+  + finally, call the function `as_date()` from the `lubridate` package to converte the date-time-timezone format to date only.
+  
+  Check the structure of the dataframe again. You've done it correctly if your `tsunami` variable is a 2-levels factor "0", "1", and the `date` variable shows a date in the format `YYYY-MM-DD`.
+    
+```{r}
+# turn tsunami into a factor
+eq.df$tsunami <- as.factor(eq.df$tsunami)
+eq.df$date <- as_date(as_datetime(date / 1000))
+```
+
+### Problem 4
+
+Now that we have our dataset of interest, let's plot some data! Follow these steps:
+
+  a. Use `geom_line()` function to show a timeline of the earthquake's magnitudes (`magnitude` per `date`). When the earthquakes with the highest magnitude happened? Discuss it.
+    
+A 6.8 earthquake happened on 1/11 and 2/16.
+
+```{r}
+# write your code here
+ggplot(eq.df, aes(x=date,y=magnitude)) +
+  geom_line()
+```
+
+  b. Create a plot to show the density of the magnitudes. Discuss the trend you see in the plot: what range of magnitudes were most common?
+
+6.0 is the most common.
+
+```{r}
+# write your code here
+ggplot(eq.df)+
+  geom_density(aes(x=magnitude))
+```
+
+  c. Create a bar plot to show the tsunami occurrences. What can we observe about the relation between tsunami occurrences and the earthquakes that happened at the beginning of this year?
+    
+The earthquakes don't look like they caused any tsunamis, except for the 6.8 earthquake on 1/11.
+
+```{r}
+# write your code here
+ggplot(eq.df) +
+  geom_bar(aes(x=date, fill = tsunami), position = "dodge")
+```
+
+  d. Create a boxplot to show the relationship of tsunami occurrences and earthquake's manitude. Considering only what you see in the plot (ignore you general knowledge on earthquakes and tsunimis), would you argue on using the magnitude to predict the ocurrences of tsunamis? Explain your reasoning.
+
+Higher magnitude earthquakes are more likely to cause a tsunami.
+
+```{r}
+
+ggplot(eq.df) +
+  geom_boxplot(aes(x=magnitude, y = date, color = tsunami))
+```
+
+**Extra credit (10 points toward Quiz rubric):** can you figure how to extract **most** of the countries from the `places` variable? If you can, then cbind a dataframe with the columns `country` and `magnitude`. Create a visualization for the `magnitude` per `country`. Which of the countries had the earthquakes with higher magnitude?
+
+_Tip_: Filter out the rows where country was not identified. I'm expecting you to easily identify around 20 counties (out of 28).
+
+Alaska had the largest earthquake.
+  
+```{r}
+eq.df$country <- str_split_fixed(eq.df$place, "\\, ", n=2)[,2]
+ggplot(filter(eq.df, country != "")) +
+  geom_point(aes(y=country, x=magnitude, color=tsunami))
+```

@@ -1,0 +1,61 @@
+---
+title: "Example"
+author: "APChaves"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Heading
+
+Lorem ipsum dolor sit [amet](https://www.google.com/search?q=lorem+ipsum&rlz=1C5CHFA_enUS1016US1017&oq=lorem+ipsum&aqs=chrome..69i57j0i131i433i512j0i67j0i131i433i512l3j69i60l2.5320j1j4&sourceid=chrome&ie=UTF-8 "lorem ipsum!"), consectetur adipiscing elit. Aliquam auctor fringilla posuere. Fusce metus nunc, volutpat non felis sit amet, condimentum bibendum nunc. Pellentesque a sagittis libero. Vivamus nulla diam, blandit a fringilla id, scelerisque vel dolor. **Morbi pellentesque molestie ipsum, a iaculis orci vehicula non. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tristique magna quis faucibus malesuada.** Suspendisse tincidunt felis tortor, sit amet tincidunt ligula tempus ac. *Vivamus ut odio egestas est tristique semper. Phasellus imperdiet turpis nec ullamcorper tempor.* Donec ac quam egestas, luctus nisl sit amet, imperdiet nisl. Morbi facilisis orci a ipsum vestibulum, aliquet porta elit lobortis.
+
+Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Donec pulvinar ullamcorper nisi id finibus. _Mauris convallis vel nibh et hendrerit. Morbi fringilla, tortor eget aliquam commodo, purus sem pulvinar lacus, vel malesuada erat orci sed ex. Etiam pretium auctor lacus, sit amet tristique lorem sollicitudin quis._ __Vivamus eu ante arcu. Donec luctus commodo mauris, a elementum risus commodo eu. Nulla id quam odio.__ `Fusce ac pulvinar nisi`. Proin lacus turpis, euismod quis finibus sed, cursus at dui. ~~Mauris ac libero pretium, tristique ipsum vel, sollicitudin metus. Donec posuere, urna in consequat iaculis, ligula elit accumsan orci, non laoreet velit urna ullamcorper ante.~~ 
+
+    This is idented code. Mauris feugiat erat ac scelerisque posuere.
+    This is another line of idented code. Pellentesque non rhoncus nisi.
+
+## Second-Level Heading
+
+Phasellus vel magna metus. Aenean non quam ipsum.
+
+Cras sollicitudin tincidunt facilisis. Quisque euismod vehicula dictum.
+
+Aliquam mattis nec urna eu tincidunt. Etiam consequat vel diam vitae tincidunt. Mauris dui mi, aliquet sit amet efficitur eu, tincidunt nec magna. Mauris sed mollis lorem.
+
+### Third-Level Heading
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit[^firstfootnote]. Aliquam auctor fringilla posuere. Fusce metus nunc, volutpat non felis sit amet, condimentum bibendum nunc. Pellentesque a sagittis libero. Vivamus nulla diam, blandit a fringilla id, scelerisque vel [dolor](https://www.markdownguide.org/ "Markdown guide"). **Morbi pellentesque molestie ipsum, a iaculis orci vehicula non. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tristique magna quis faucibus malesuada.** Suspendisse tincidunt felis tortor, sit amet tincidunt ligula tempus ac. *Vivamus ut odio egestas est tristique semper. Phasellus imperdiet turpis nec ullamcorper tempor.* Donec ac quam egestas, luctus nisl sit amet, imperdiet nisl. Morbi facilisis orci a ipsum vestibulum, aliquet porta elit lobortis.
+
+1. Lorem ipsum dolor sit amet
+2. Consectetur adipiscing elit
+3. Integer molestie lorem at massa
+
+#### Fourth-Level Heading
+
+"Etiam metus odio, eleifend in risus a^[Inline footnote], efficitur pulvinar ante. Nam cursus vitae odio a maximus." Integer auctor dolor magna, 'nec viverra sapien viverra sit [amet](https://www.rstudio.com/ "RStudio for R").' Phasellus tellus ipsum, pretium vitae blandit eget, semper nec leo. Mauris ultrices dui dolor, at pellentesque magna porta in.
+
+##### Fifith-Level Heading
+
+Vestibulum sapien velit, euismod vel ex vitae, feugiat elementum ligula. Donec id est imperdiet, tincidunt quam et, feugiat sapien. Curabitur ultricies, metus ut aliquam iaculis, felis erat viverra enim, et tristique tortor quam ut enim.
+
+###### Sixth-Level Heading
+
++ Mauris eleifend facilisis arcu, at hendrerit nulla feugiat a.
++ Mauris eleifend facilisis arcu, at hendrerit nulla feugiat a.
+  - Aliquam erat volutpat.
+    * Ac tristique libero volutpat at
+    + Aenean non venenatis ex.
+
+```{r message=FALSE, error=FALSE}
+library(dplyr)
+variable <- c('a', 'b', 'c')
+variable
+```
+
+[^firstfootnote]: Footnote text.

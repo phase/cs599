@@ -1,0 +1,171 @@
+---
+title: "Data exchange with CSV"
+output:
+  html_document:
+    df_print: paged
+---
+
+## Importing a CSV file
+
+The function `read.csv()` imports a file with the `.csv` extension to a `data.frame` object. The first parameter is the file name. The path must be complete if the file is not in the same folder, for example `'C:\\Users\\name\\data\\res.csv'` (note the double slashes as escaping character) or `'/Users/name/data/res.csv'`.
+
+There are a few other parameters that `read.csv()` can take. Some of them are listed below:
+
+  * `header = TRUE`: set to `FALSE` if the data does not have a header;
+  * `sep = ","`: change the `,` in case the file has a different delimiter;
+  * `quote = "\""`: defines the character used for quoting;
+  * `dec = "."`: defines the character used for decimal points.
+
+```{r}
+# read res.csv file from our current directory
+jabref.commits <- read.csv("res.csv")
+#jabref.commits <- read.csv("res.csv", sep = ";")           # not the case here
+#jabref.commits <- read.csv("res.csv", header = FALSE)      # not the case here
+jabref.commits <- read.csv("res.csv", na.strings=c(-1,''))  # Replaces all -1 and empty string as <NA>
+
+# display csv file
+#print(jabref.commits)  #not a good idea for large data!!
+head(jabref.commits)
+tail(jabref.commits)
+
+#display the structure of the file
+str(jabref.commits)
+```
+
+The `read.csv()` function is not very fast for large data, though. There are a couple alternatives that you may want to explore in case you have too large datasets. **Downside:** you'll have to install additional packages!
+
+
+#### Option 1: readr package
+
+```{r}
+library(readr)
+
+# extra parameters are also available!
+jabref.commits <- read_csv("res.csv")
+
+# display csv file
+#print(jabref.commits)  #not a good idea for large data!!
+head(jabref.commits)
+tail(jabref.commits)
+
+#display the structure of the file
+str(jabref.commits)
+```
+
+#### Option 2: data.table package
+
+```{r}
+library(data.table)
+
+# extra parameters are also available!
+jabref.commits <- fread("res.csv", header = TRUE)
+
+# display csv file
+#print(jabref.commits)  #not a good idea for large data!!
+head(jabref.commits)
+tail(jabref.commits)
+
+#display the structure of the file
+str(jabref.commits)
+```
+
+## Useful tips
+
+#### Set column names
+```{r}
+colnames(jabref.commits) = c('X1','X2','X3','X4', 'X5', 'X6', 'X7', 'X8')
+str(jabref.commits)
+```
+
+#### Find information about the the dataframe
+```{r}
+dim(jabref.commits)  #rows x columns
+ncol(jabref.commits) #number of columns
+nrow(jabref.commits) #number of rows
+names(jabref.commits) #name of the columns
+```
+
+#### Range of a data
+```{r}
+min(jabref.commits$X3)
+max(jabref.commits$X3)
+```
+
+Observe that we used the `$` symbol to access one particular column of the dataframe.
+
+#### Subsetting
+```{r}
+jabref.commits.sub <- subset(jabref.commits, X5 == "1 file changed") 
+dim(jabref.commits.sub)  #show the dimensions of the subset we just created
+head(jabref.commits.sub, 20)  #check the 20 first ones
+
+jabref.commits <- read_csv("res.csv")   #re-importing using the readr library
+jabref.commits[1,1]                     #first row, first column
+jabref.commits[0:10, 1]                 #first ten rows, first column
+jabref.commits[1, 2:4]                  #first row, columns 2 through 4
+jabref.commits[,2]                      #all the row, second column
+jabref.commits[[1]]                     #fist column as a vector
+jabref.commits[2,]                      #the second row
+jabref.commits[,-1]                     #excludes the first column
+jabref.commits$`commit id`              #commit id only (vector)
+jabref.commits["commit id"]             #commit id only (tibble)
+```
+
+## Exporting a CSV file
+
+Sometimes we create (or modify) a dataframe and we want to save a file with the changes. Let's imagine that we want to create a new csv file with the subset of `jabref.commits`.
+
+```{r}
+write.csv(jabref.commits.sub, "res_subset.csv")  #check your folder to see that the file is there!
+
+#write_csv(jabref.commits.sub, "res_subset.csv") #using the readr package
+#fwrite(jabref.commits.sub, "res_subset.csv") #using the data.table package
+```
+
+## TODO in-class assigment
+
+If we look carefully at the `res.csv` data, we will see that there is a column that seems to be an anomaly.
+
+```{r}
+jabref.commits <- read_csv("res.csv")
+View(jabref.commits)
+```
+
+**Go to BBLearn and answer the [In-class] Data frame anomaly.**
+
+# The tidyverse package
+
+From now on, we're going to learn the magical tricks that the `dplyr` package can do. Just like the `readr` package, the `dplyr` package is part of the `tidyverse` library. If you don't want to import both packages individually (and some others!), you can just import `tidyverse`. `tidyverse` has very useful tools for data wrangling!
+
+```{r}
+library(tidyverse)
+
+#quick look at the data (similar to str())
+names(jabref.commits)
+colnames(jabref.commits) = c('commit.id','author','date','comment', 'changed', 'added', 'deleted', 'error')
+glimpse(jabref.commits)
+```
+
+## Selecting and filtering (subsetting)
+
+```{r}
+#selecting the columns we want
+jr.commits.sub <- jabref.commits %>%
+  select(commit.id, changed, added, deleted)
+head(jr.commits.sub)
+
+#selecting the lines we want
+jr.commits.sub <- jabref.commits %>%
+  select(commit.id, changed, added, deleted) %>%   #The string matches a regex
+  filter(author == "Oliver Kopp")   #logical outcome (true/false)
+head(jr.commits.sub)
+```
+
+Answer to that: why did the error occur? How to solve the issue?
+
+#### Filtering based on a regex
+```{r}
+jr.commits.sub <- jabref.commits %>%
+  filter(stringr::str_detect(author, "Kopp"))   #logical outcome (true/false), just like the str_detect outcome!
+head(jr.commits.sub)
+```

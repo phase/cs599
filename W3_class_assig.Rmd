@@ -1,0 +1,115 @@
+---
+title: "W3 In-class practice"
+author: "Jadon Fowler jaf582 5778191"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instructions
+
+Download a copy of this markdown. Change the `author: ` tag above to have your name and NAU's ID. Fill in the chunks with your R code that solves the problem. Knit your final document into a HTML file and submit it through BBLearn in the assignment **[In-class]** CSV before the end of the class.
+
+If you're using any libraries to run your code, please load them here.
+
+```{r load_libraries, echo=FALSE, message=FALSE}
+library(tidyverse)
+```
+
+### Problem 1
+
+Download the .csv file attached to this assignment. Write an R code that imports the CVS into R. It's your job to define whether you need or not to add parameters to the function you'll use to import the data. The variable used to store the csv must be named `airbnb`. Print the `head` and the `tail` of the dataset.
+
+```{r}
+#write your R code here
+airbnb <- read.csv("Airbnb_Open_Data.csv")
+head(airbnb)  #lookup the head
+tail(airbnb)  #lookup the tail
+```
+
+### Problem 2
+
+Check the following information about the dataset:
+
+  1. the structure
+  
+```{r}
+#write your R code here
+str(airbnb)
+```
+
+  2. the dimension
+
+```{r}
+#write your R code here
+dim(airbnb)
+```
+
+  3. the column names
+
+```{r}
+#write your R code here
+colnames(airbnb)
+```
+
+### Problem 3
+
+It looks like the column names are quite inconvenient mainly because they have white space between words, some are pretty long, and they do not follow any standard format (lower vs. upper case, underscore as delimiters, and so on).
+
+Considering that, change the column names to a more convenient, standardized format. Below you'll find my solution, but you can create your own!
+
+```{r}
+#write your R code here
+# makes everything lowercase and replaces '_' with '.'
+airbnb <- rename_with(airbnb, function(x) tolower(str_replace_all(x, "_", ".")))
+colnames(airbnb)
+```
+
+### Problem 4
+
+When we inspect the structure, we see that there are a few variables that has the incorrect type. For example, the columns `price` and `service fee` (you may have changed these names!) has the dollar sign at the begining, which turns it into character instead of numeric values.
+
+To fix that problem, write a **regex** that detects and remove the dollar sign from those two columns.
+
+**Note:** you may want to attribute the column you're going to work with to a variable, work with that array, and then replace the column with the clean array. I started that for you!
+
+```{r}
+price <- airbnb$price  #please use the column name you assigned in problem 3!
+service <- airbnb$service.fee #please use the column name you assigned in problem 3!
+#now, replace the $ in the vector price and the vector service with an empty string
+
+#write your R code here
+price <- str_replace(price, "^\\$", "")
+service <- str_replace(service, "^\\$", "")
+
+#attribute the fixed vector back to the dataframe
+#please use the column names you assigned in problem 3!
+airbnb$price <- price
+airbnb$service.fee <- service
+head(price)
+head(service)
+```
+
+### Problem 5
+
+We want to know the price range for the airbnb (maximum and minimum values), but we want to consider all the costs (price per night plus service fee). The first problem we have is that price and service fees are characters variables, thus, we can't really sum them up. Then, we have to create a new vector with the sum before we take the range information. To find the price range, do the following:
+
+  1. Convert the price and service fee columns to numeric values
+  2. Sum the columns price and service fee, and store the result in a `final_cost` variable
+  3. Find the minimum and maximum values of `final_cost`. **Note:** because there are `NA`s in your data, you should ignore them when finding the minimum and maximum values. Check the function parameter called `na.rm`, it should be set to `TRUE` to remove the `NA` from the results.
+  
+```{r}
+#write your R code here
+
+airbnb$price <- as.numeric(airbnb$price)
+airbnb$service.fee <- as.numeric(airbnb$service.fee)
+
+final_cost = airbnb$price + airbnb$service.fee
+min(final_cost, na.rm = TRUE)
+max(final_cost, na.rm = TRUE)
+```

@@ -1,0 +1,221 @@
+---
+title: "W2 In-class practice"
+author: "Jadon Fowler jaf582 5778191"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(stringr) #for str_...() functions
+library(dplyr)
+```
+
+# Instructions
+
+Download a copy of this markdown. Change the `author: ` tag above to have your name and NAU's ID. Fill in the chunks with your R code that solves the problem. Knit your final document into a HTML file and submit it through BBLearn in the assignment [In-class] Regex before the end of the class.
+
+```{r import}
+jabref.commits <- read.csv("res.csv")
+comments <- jabref.commits$comment
+head(comments)  #lookup the head
+tail(comments)  #lookup the tail
+```
+
+In the previous chunk, we imported a comma-separated file and created an array ```comments``` that contain the commit messages for a set of JabRef project's commits. We will use this array to solve the following problems.
+
+### Problem 1
+
+Find the pattern `translations` in `comments`. To do so, follow these steps:
+
+  1. create a string `pattern` containing a regular expression pattern to match  `"translations"`;
+  2. use the [`str_detect()`](https://stringr.tidyverse.org/reference/str_detect.html) function to check whether `pattern` matches the comments in `commits` variable and save the result in a variable named `matches`;
+  3. use the [`if_else()`  function](https://dplyr.tidyverse.org/reference/if_else.html) to create a vector, denoted as  `tl_matches`, containing  `yes`  and  `no` according to the values in `matches` variable.
+  4. lookup the `comments` selecting only the positions that have a match. Show the head and the tail of the filtered data.
+
+```{r}
+pattern <- "translations"
+matches <- str_detect(comments, pattern)
+tl_matches <- if_else(matches, "yes", "no")
+filtered.comments <- comments[matches]
+head(filtered.comments)
+tail(filtered.comments)
+```
+
+### Problem 2
+
+Find a pattern to match both `merge` and `Merge`. To do so:
+
+  1. create a string `pattern` containing a regular expression pattern to match  `"merge"` and `"Merge"`;
+  2. use the [`str_detect()`](https://stringr.tidyverse.org/reference/str_detect.html) to check whether `pattern` matches the comments in `commits` variable and save the result in a variable named `matches`;
+  3. lookup the `comments` selecting only the positions that have a match. Show the head and the tail of the filtered data.
+  4. use `sum()` function to compute the number of times `pattern` matches the comments.
+
+```{r}
+pattern <- "[Mm]erge"
+matches <- str_detect(comments, pattern)
+filtered.comments <- comments[matches]
+head(filtered.comments)
+sum(str_detect(comments, pattern))
+```
+
+### Problem 3
+
+Find a pattern to match the pull request numbers that start with `#845`, `#854`, and `#812`. To do so:
+
+  1. create a string `pattern` containing a regular expression pattern to match the pull request numbers `#845`, `#854`, and `#812`.
+  2. check whether the pattern matches the comments and ave the result in the `matches` variable.
+  3. lookup the `comments` selecting only the positions that have a match, make sure you show the results.
+
+```{r}
+pattern <- "#(845|854|812)"
+matches <- str_detect(comments, pattern)
+filtered.comments <- comments[matches]
+head(filtered.comments)
+```
+
+### Problem 4
+
+Find a pattern to match the patterns `fix exception`, knowing that the pattern may appear with or without the space between the words (e.g., `fixexception`) and both words _may_ begin with uppercase letter (e.g., `File Exception`). To do so:
+
+  1. create a string `pattern` containing a regular expression pattern to match the patterns described above;
+  2. check whether the pattern matches the comments and ave the result in the `matches` variable;
+  3. count the number of titles that matched the regular expression;
+  4. lookup the `comments` selecting only the positions that have a match, make sure you show the results.
+
+```{r}
+pattern <- "[Ff]ix ?[Ee]xception"
+matches <- str_detect(comments, pattern)
+filtered.comments <- comments[matches]
+head(filtered.comments)
+```
+
+### Problem 5
+
+Locate the start and end positions of the matches for the following pattern:
+
+    - A single open parentheses character
+    - A hashtag symbol
+    - One or more digits (0-9)
+    - A single close parentheses character
+    
+Do the following:
+  1. create a string `pattern` containing a regular expression pattern to match the pattern described above;
+  2. create a variable named `match.comments` that stores only the comments that match the pattern;
+  3. use the [`str_locate()`](https://stringr.tidyverse.org/reference/str_locate.html) to locate the start and end positions of matches in `match.comments` and save the result in a variable named `positions`;
+  4. show the head and tail of the `positions` variable
+
+```{r}
+pattern <- "\\(#[0-9]+\\)"
+match.comments <- comments[str_detect(comments, pattern)]
+positions <- str_locate(match.comments, pattern)
+head(positions)
+tail(positions)
+```
+
+### Problem 6
+
+Considering the pattern from **Problem 5**, use the [`str_extract()`](https://stringr.tidyverse.org/reference/str_extract.html) function to extract the pull request numbers from the `match.comments`. Store the results in a variable named `pr.numbers` and show the head and tail of the result.
+
+```{r}
+pr.numbers <- str_extract(match.comments, pattern)
+head(pr.numbers)
+tail(pr.numbers)
+```
+
+### Problem 7
+
+Modifiy the pattern from **Problem 5** to capture the same pattern, but remove the parenthesis from the outcome. To do so:
+
+  1. rewrite the `pattern` to include a capture group that leaves the parentheses out;
+  2. create a variable named `match.comments` that stores only the comments that match the pattern;
+  3. extract the pull request numbers from `match.comments` using the [`str_match()`](https://stringr.tidyverse.org/reference/str_match.html) function. Store the results in a variable named `pr.numbers` and show the head and tail of the second column of `pr.numbers` only (shows only the values without the parentheses).
+
+```{r}
+pattern <- "\\((#[0-9]+)\\)"
+match.comments <- comments[str_detect(comments, pattern)]
+pr.numbers <- str_match(match.comments, pattern)
+head(pr.numbers[,2])
+tail(pr.numbers[,2])
+```
+
+### Problem 8
+
+Write a regular expression that match comments containing `up` for the following cases:
+  
+  - `pattern1`: the `up` string must be preceded by a word boundary and end the string
+  - `pattern2`: the `up` string must preceded and followed by a word boundary, anywhere in the string
+  - `pattern3`: the `up` string must begin the string but not necessarily be followed by a word boundary
+  
+The regex should match whether or not the first character is capitalized. Use the [`str_detect()`](https://stringr.tidyverse.org/reference/str_detect.html) function to check whether each pattern matches the comments in `commits` and show the commit messages where the patterns were detected.
+
+```{r}
+pattern1 <- "\b[Uu]p$"
+pattern2 <- "\b[Uu]p\b"
+pattern3 <- "^[Uu]p"
+pattern <- paste(pattern1, pattern2, pattern3, sep="|")
+comments[str_detect(comments, pattern)]
+```
+
+### Problem 9
+
+Find a regular expression that match comments with a pattern similar to the following:
+
+```
+/net.bytebuddy-byte-buddy-parent-1.12.0
+/org.antlr-antlr4-runtime-4.9.3
+/com.konghq-unirest-java-3.13.3
+/io.github.classgraph-classgraph-4.8.130
+/org.fxmisc.flowless-flowless-0.6.7
+/com.adarshr.test-logger-3.1.0
+/com.tngtech.archunit-archunit-junit5-engine-0.22.0
+/io.github.classgraph-classgraph-4.8.129
+/org.xmlunit-xmlunit-matchers-2.8.3
+/org.jsoup-jsoup-1.14.3
+/net.bytebuddy-byte-buddy-parent-1.11.21
+/org.libreoffice-libreoffice-7.2.2   
+...
+```
+
+Notice that all the strings:
+
+  - start with a slash
+  - contains a 2-3 letters followed by a dot
+  - after the first dot, there can be one or more sets of letters and/or numbers followed by a dash (-) or another dot (.)
+  - the list above is not comprehensive (in fact there are 39 comments that should match the pattern)
+
+Do the following:
+
+  1. write the pattern in a `pattern` variable;
+  2. check how may matches can be found in the `comments` array;
+  3. use the [`grep()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/grep) function to find the position where the matches are located. Store the result in a variable named `pos`;
+  3. replace the matches in the `comments` array with the string `"/ANONYMOUS"`. Attribute the result back to the `comments` array;
+  4. lookup the `comments` selecting only the positions stored in the variable `pos`.
+  
+```{r}
+pattern <- "/[a-z]{2,3}\\.[a-z0-9\\.-]*"
+# comments[str_detect(comments, pattern)]
+pos <- grep(pattern, comments)
+comments <- str_replace(comments, pattern, "/ANONYMOUS")
+comments[pos]
+```
+
+### Problem 10
+
+Find a regular expression that matches pull request numbers, which starts with a \# and it is followed by a set of numbers. For example, $\#8590$ is a pull request number. Then, do the following:
+
+  1. write your pattern in a `pattern` variable;
+  2. use the [`grep()`](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/grep) function to find the position where the matches are located. Store the result in a variable named `pos`;
+  3. split the `comments` in the `pos` positions by the `pattern`. Use the `simplify=TRUE` option. Attribute the result to a variable named `split.comments`;
+  4. show the first column of the `split.comments` array.
+
+```{r}
+pattern <- "#[0-9]+"
+pos <- grep(pattern, comments)
+split.comments <- str_split(comments[pos], pattern, simplify = TRUE)
+split.comments[,1]
+```
+

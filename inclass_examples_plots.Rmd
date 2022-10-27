@@ -1,0 +1,265 @@
+---
+title: "Data visualization - basics"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Data visualization
+
+We will use mainly the `ggplot2` library, but other libraries may be discussed along the course. We will use the airbnb dataset to play with the basics of data visualization.
+
+```{r}
+library(ggplot2)
+library(dplyr)     #for %>%
+library(readr)     #for read_csv
+library(stringr)   #for regex functions
+
+# read res.csv file from our current directory
+airbnb <- read_csv("Airbnb_Open_Data.csv")
+colnames(airbnb) = c('id','name', 'host_id', 'host_verified', 'host_name', 'group', 'neighbourhood', 'latitude', 'longitude', 'country', 'country_code', 'inst_bookable', 'cancel_policy', 'room_type', 'construction_year', 'price', 'service_fee', 'min_nights', 'number_reviews', 'last_review', 'reviews_month', 'review_rate', 'host_list_count', 'availability', 'house_rules', 'license')
+names(airbnb)
+```
+
+## Barplot
+
+Useful to represent univariate, categorical data.
+
+We will use the column `host_identity_verified` to demonstrate how to create barplots. Let's first inspect that column.
+
+```{r}
+str(airbnb$host_verified)
+```
+
+As we can see, the column has type `chr`, which is quite inconvenient. If we want to treat this column as categorical variables, we better use `factor` as the data type. Let's make that conversion.
+
+```{r}
+airbnb$host_verified <- as.factor(airbnb$host_verified)
+str(airbnb$host_verified)
+```
+
+Now we can plot the data!
+
+```{r}
+airbnb %>%                                    # the dataframe
+  ggplot(aes(x=host_verified)) +              # the plot aesthetics
+  geom_bar()                                  # the bars
+```
+
+It may be possible that we don't care about how many `NA` values we have for the visualization. In this case, we can drop the `NA`s out.
+
+```{r}
+airbnb %>%                                    # the dataframe
+  ggplot(aes(x=host_verified)) +              # the plot aesthetics
+  geom_bar(na.rm = T) +                       # the bars (removing NAs)
+  scale_x_discrete(na.translate = F)
+```
+
+According to the plot, we have about the same number of `unconfirmed` and `verified` hosts. We can check that by summarizing the column:
+
+```{r}
+summary(airbnb$host_verified)
+
+#or using dplyer
+airbnb %>%
+  count(host_verified)
+```
+
+We can represent the categories by percents instead of counts:
+
+```{r}
+airbnb %>%                                    # the dataframe
+  ggplot(aes(x=host_verified,
+             y=..count../sum(..count..))) +   # the plot aesthetics using percentage for the y
+  geom_bar(na.rm = T) +                       # the bars (removing NAs)
+  scale_x_discrete(na.translate = F)
+```
+
+If we want to make the percentage to look nice, we can add a label to the scale:
+
+```{r}
+airbnb %>%                                    # the dataframe
+  ggplot(aes(x=host_verified,
+             y=..count../sum(..count..))) +   # the plot aesthetics using percentage for the y
+  geom_bar(na.rm = T) +                       # the bars (removing NAs)
+  scale_x_discrete(na.translate = F) +
+  scale_y_continuous(labels = scales::percent) # nice percentage presentation
+```
+
+Now, let's do the same for the `review_rate` variable. Notice that this variable has an order ($1 < 2 < 3 < 4 < 5$), which is called ordinal variables. We may want to present them in the appropriate order, so we use the `as.ordered()` function, instead of `as.factor()`.
+
+```{r}
+str(airbnb$review_rate)
+airbnb$review_rate <- as.ordered(airbnb$review_rate)  #creating the ordered factor
+str(airbnb$review_rate)
+
+airbnb %>%                                    # the dataframe
+  ggplot(aes(x=review_rate,
+             y=..count../sum(..count..))) +   # the plot aesthetics using percentage for the y
+  geom_bar(na.rm = T) +                       # the bars (removing NAs)
+  scale_x_discrete(na.translate = F) +
+  scale_y_continuous(labels = scales::percent) # nice percentage presentation
+
+airbnb %>%
+  count(review_rate)
+```
+
+## Histogram
+
+Useful to represent univariate, numerical data.
+
+We will use the column `price` to demonstrate how to create barplots. We know that the column price needs some treatment from the original file, so let's clean that up first. I will start by checking how many `NA`s I have to make sure I didn't lose values when converting the strings to numbers. Then, I'll replace the `$` with an empty string, remove the comma in the numbers, and cast the variable from `chr` to `num`. To see if that worked fine, I'll check the `NA`s again.
+
+```{r}
+#check how many NA numbers we have
+airbnb %>%
+  filter(is.na(price)) %>%
+  count(price)
+
+airbnb$price <- str_replace(airbnb$price, "\\$\\s*", '')
+airbnb$price <- str_replace(airbnb$price, ",", '')
+airbnb$price <- as.numeric(airbnb$price)
+
+#check the NAs again
+airbnb %>%
+  filter(is.na(price)) %>%
+  count(price)
+```
+
+Now we can plot the histogram. Notice that the structure of the plot statement is the same, but we will replace the `geom_bar` with `geom_histogram`.
+
+```{r}
+airbnb %>%                       # the dataframe
+  ggplot(aes(x=price)) +         # the plot aesthetics
+  geom_histogram(binwidth = 10)  # the histogram
+```
+If we want to plot the histogram as a density plot, we can just change the y-axis.
+
+```{r}
+airbnb %>%                               # the dataframe
+  ggplot(aes(x=price, y=..density..)) +  # the plot aesthetics
+  geom_histogram(binwidth = 10)          # the histogram
+```
+There is a specific density plot though, where the histogram is a smooth line and the area under the line is equal to one.
+
+```{r}
+airbnb %>%                # the dataframe
+  ggplot(aes(x=price)) +  # the plot aesthetics
+  geom_density(bw = 1)    # the density plot
+```
+
+The last alternative to univariate numeric data is the dot plot. In the dot plot, each observation is represented by a dot. However, dot plots don't work very well when we have a large dataset because it's hard to represent thousands of stacked dots! Thus, let's try the commits dataset! We will make the `author` a factor and plot the commits per author, only for the authors that have less than 15 commits.
+
+```{r}
+# read res.csv file from our current directory
+jabref.commits <- read_csv("res.csv")
+jabref.commits$author <- as.factor(jabref.commits$author)
+
+## Counting the number of authors
+jabref.commits %>%
+  group_by(author) %>%   # this is new!!!
+  count()
+  
+sub.author <- 
+  jabref.commits %>%
+  group_by(author) %>%    
+  filter(n() < 15)
+
+sub.author %>%                # the dataframe
+  ggplot(aes(x=author)) +  # the plot aesthetics
+  geom_dotplot(binwidth = .8)          # the bars (removing NAs)
+```
+
+## Boxplot
+
+Useful to represent bivariate, categorical vs. numerical data.
+
+Imagine that we want to show the `price` distribution according to the review's rate. Because `price` is numerical and `review_rate` is categorical, we need to group the `price` per `review_rate`.
+
+```{r}
+airbnb %>%                       # the dataframe
+  ggplot(aes(x=review_rate, y=price)) + # the plot aesthetics, x is the categorical and y is the numerical value
+  geom_boxplot(na.rm = T) +     # the boxplot
+  scale_x_discrete(na.translate = F)
+```
+
+## Stacked/grouped barchart
+
+Useful to represent bivariate, categorical vs. categorical data.
+
+In this case, we need to break each category into more specific categories. For example, imagine that we want to see the counts for each `review_rate`, but we want to see them grouped by the room type. Before anything, let's take a look at the `room_type` variable. We need to make sure it is a factor and, to assess if our plot is showing the appropriate outcomes, we can also take a look at the counts for each `room_type`.
+
+```{r}
+str(airbnb$room_type)
+airbnb$room_type <- as.factor(airbnb$room_type)
+str(airbnb$room_type)
+
+airbnb %>%
+  count(room_type)
+```
+
+As we can see, we should not expect to have a large influence of hotels in our plot. Since there are not many hotels in the dataset, we may not even see the factor in the plot! Let's plot the graph. Observe that we used the `geom_bar()` as we did for barplots, but we added the option `position=`. The parameter `position` can take two possible values: `"dodge"` or `"stack"`. The `"stack"` value creates a stacked barchart (vertical position) while the `"dodge"` option creates a grouped barchart (horizontal position). Also notice the `fill=` parameter in the aesthetics. It guarantees that we will have different colors per group and a legend for the grouping factor.
+
+```{r}
+airbnb %>%                       # the dataframe
+  ggplot(aes(x=review_rate, fill=room_type)) + # the plot aesthetics, x is the categorical and y is the numerical value
+  geom_bar(position="stack", na.rm = T) +     # the barplot with position dodge
+  scale_x_discrete(na.translate = F)
+```
+
+```{r}
+airbnb %>%                       # the dataframe
+  ggplot(aes(x=review_rate, fill=room_type)) + # the plot aesthetics, x is the categorical and y is the numerical value
+  geom_bar(position="dodge", na.rm = T) +     # the barplot with position dodge
+  scale_x_discrete(na.translate = F)
+```
+
+## Scatterplot
+
+Useful to represent bivariate, numerical vs. numerical data.
+
+Imagine that we want to understand whether there is a relationship between the number of changed files and the number of lines changed in the jabref commits. Let's start by converting the variables to numerical values.
+
+```{r}
+colnames(jabref.commits) = c("id", "author", "date", "comment", "changed", "added", "deleted")
+names(jabref.commits)
+
+jabref.commits$added <- str_replace(jabref.commits$added, " insertions?\\(\\+\\)", '')
+jabref.commits$added <- str_replace(jabref.commits$added, " deletions?\\(\\-\\)", '')
+
+jabref.commits %>%
+  filter(is.na(added)) %>%
+  count(added)
+
+jabref.commits$added <- as.numeric(jabref.commits$added)
+
+jabref.commits %>%
+  filter(is.na(added)) %>%
+  count(added)
+
+#do the same for the `changed` column
+jabref.commits$changed <- str_replace(jabref.commits$changed, " files? changed", '')
+
+jabref.commits %>%
+  filter(is.na(changed)) %>%
+  count(changed)
+
+jabref.commits$changed <- as.numeric(jabref.commits$changed)
+
+jabref.commits %>%
+  filter(is.na(changed)) %>%
+  count(changed)
+```
+
+Now we can plot the data.
+
+```{r}
+jabref.commits %>%                       # the dataframe
+  ggplot(aes(x=changed, y=added)) + # the plot aesthetics, x is the categorical and y is the numerical value
+  geom_point()    # the scatterplot
+```
+
+We can see that there's not a clear correlation between the amount of changed files and the amount of added lines.
+
+
+

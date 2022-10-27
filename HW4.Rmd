@@ -1,0 +1,170 @@
+---
+title: "HW4"
+author: "YOUR NAME AND ID GO HERE"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instructions
+
+Download a copy of this markdown. Change the `author: ` tag above to have your name and NAU's ID. Fill in the file with your solution to the proposed problems. Knit your final document to PDF and submit it through BBLearn in the assignment `[HW] Homework 4: web scrapping` by the end of the day on **Thursday, November 3 (11:59:00 PM)**.
+
+**Note:** to knit your homework to PDF, you need to have MikTex installed. You can download and install MikTex from [here](https://miktex.org/download). If you don't want to install MikTex, you can knit to HTML, open the file in the browser and print the page to PDF. You can also submit the `.Rmd` file.
+
+For all the problems, please import the useful libraries in this chunk of code:
+
+```{r libraries, warning=FALSE, echo=FALSE, message=FALSE}
+#import the libraries here
+
+```
+
+### Problem 1: Reshaping data
+
+Consider the following dataframe about the weather:
+
+```{r}
+weather <- read.delim(file = "https://ramnathv.github.io/pycon2014-r/explore/data/weather.txt", stringsAsFactors = FALSE)
+
+glimpse(weather)
+```
+
+The dataset contains the temperature for As we can see, we have many NAs in this dataset, but this may be due to the organization of variables/observations. Explain why this data is untidy.
+
+> write your explanation here
+
+
+Then, write a code that converts the data into a tidy and clean dataframe. Make sure your dataset follows these guidelines:
+
+  * the dataframe is tidy;
+  * NA measurements for temperature are dropped;
+  * day of the month is a numerical data;
+  * sorted by year, month, and day, respectively.
+
+```{r}
+# tidy dataframe
+
+
+# drop the null measurements
+
+
+# convert day into numerical
+
+
+#arrange by year, month, day
+
+
+```
+
+## Problem 2: web scraping
+
+We will scrape the page [https://quotes.toscrape.com/](https://quotes.toscrape.com/page/1) and create a dataframe to analyse authorship and tags of quotes in that page. Investigate the page a little bit. You'll notice that there is only 10 quotes in the page, but there is a `Next` button at the end, and the quotes continues on. We want to scrape 100 quotes (10 of these pages).
+
+Let's create an empty dataframe to begin with. I completed this step for you, by creating `df_quotes` with one column (`quotes`).
+
+```{r}
+# creating an empty dataframe with 0 rows and 3 cols
+df_quotes <- data.frame(matrix(nrow = 0, ncol = 1))
+
+# assign column names to the dataframe
+colnames(df_quotes) = c("quotes")
+glimpse(df_quotes)
+```
+
+**Step 1:** use a for loop to scrape the 10 first pages of [quotes.toscrape](https://quotes.toscrape.com/page/1). In each page, there is an html tag `<div class=quote>`, which represents the quotes in the page. This `div` comes with the quote, the authors and the tags (when available).
+
+Use the `rvest` functions to scrape these `div.quote` elements from each page. Once you have the list with the 10 codes from a page, use the `rbind` function to add the quotes into our `df_quotes` dataframe.
+
+```{r}
+for (x in 1:10) {
+  url <- paste("https://quotes.toscrape.com/page/",x, sep = '')
+  
+  page <- #read the page here
+  quotes <- #get the div.quote elements
+  quotes <- #convert the quotes from list to text (you may want to use text2)
+  
+  #binding the scraped quotes to our dataframe:
+  df_quotes <- rbind(df_quotes, as.data.frame(quotes))
+}
+```
+
+**Step 2:** Our `df_quotes` dataframe is one single column that contains quotes, author names and list of tags. We want to break this into three separate columns. Based on what we learned in this course so far, transform the `df_quotes` into a dataframe of dimensions `(100, 3)`, where the rows contain the 100 quotes from the page and the columns contain `quotes`, `authors`, and `tags`. A glimpse of this dataframe would be as following:
+
+---
+
+> Rows: 100
+> Columns: 3
+> $ quotes  <chr> "“The world as we have created it is a process of our thinking. It cannot be changed w…
+> $ authors <chr> "Albert Einstein", "J.K. Rowling", "Albert Einstein", "Jane Austen", "Marilyn Monroe",…
+> $ tags    <chr> "change deep-thoughts thinking world", "abilities choices", "inspirational life live m… 
+
+---
+
+_Tips:_ `stringr` library may have useful functions for this problem!
+
+```{r}
+quotes <- str_split(df_quotes$quotes, '.\\”by ', simplify = TRUE)
+author_tags <- quotes[,2]
+authors <- str_split(author_tags, ' \\(about\\)\nTags: ', simplify = TRUE)
+tags <- authors[,2]
+quotes <- quotes[,1]
+authors <- authors[,1]
+df_quotes <- cbind.data.frame(quotes, authors, tags)
+glimpse(df_quotes)
+```
+
+** Step 3:** Notice that the column `tags` has several values in each row. This is because one quote may have zero or more tags. Tags are separated by whitespace.
+
+Reshape this dataframe to: (1) separate the tags into several columns (one column for each tag); (2) reshape these columns in a longer format; (3) remove all the rows that do not have any tags. A glimpse of this dataframe would be as follows:
+
+---
+
+> Rows: 232
+> Columns: 3
+> $ quotes  <chr> "“The world as we have created it is a process of our thinking. It cannot be changed w…
+> $ authors <chr> "Albert Einstein", "Albert Einstein", "Albert Einstein", "Albert Einstein", "J.K. Rowl…
+> $ tag     <chr> "change", "deep-thoughts", "thinking", "world", "abilities", "choices", "inspirational…
+
+---
+
+Notice that the first quote from Albert Einstein has four tags (change, deep-thoughts, thinking, and world). Thus, "Albert Einstein" and the quote itself is repeat four times, one per tag.
+
+_Tips:_ You may want to review `stringr`, `tidyr`, and `dplyr` libraries to solve this problem.
+
+```{r}
+tags <- str_split(df_quotes$tags, '\\s', simplify = TRUE)
+df_quotes <- cbind.data.frame(df_quotes, tags)
+
+df_quotes <- df_quotes %>% pivot_longer(cols=!c(1:3), values_to = "tag", values_drop_na = TRUE)
+
+df_quotes <- df_quotes %>%
+  filter(tag!="") %>%
+  select(-tags, -name)
+glimpse(df_quotes)
+```
+
+**Step 4:** Now that our dataset is ready, produce a visualization to show:
+
+
+1. the frequency of tags that are mentioned more than twice; _Tips:_ grouping by variable using `dplyr` library may be useful here!
+
+```{r}
+filter_tag <- df_quotes %>% group_by(tag) %>% filter(n() > 2) %>% select(tag)
+
+ggplot(filter_tag, aes(x=tag)) +
+  geom_bar()
+```
+
+2. the frequency of authors that has more than seven quotes; _Tips:_ grouping by variable using `dplyr` library may be useful here!
+
+```{r}
+filter_author <- df_quotes %>% group_by(authors) %>% filter(n() > 7) %>% select(authors)
+
+ggplot(filter_author, aes(x=authors)) +
+  geom_bar()
+```

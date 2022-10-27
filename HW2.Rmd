@@ -1,0 +1,173 @@
+---
+title: "HW2"
+author: "Jadon Fowler jaf582 5778191"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instructions
+
+Download a copy of this markdown. Change the `author: ` tag above to have your name and NAU's ID. Fill in the file with your solution to the proposed problems. Knit your final document to PDF and submit it through BBLearn in the assignment `[HW] Homework 2: data visualization` by the end of the day on **Thursday, October 6 (11:59 PM)**.
+
+**Note:** to knit your homework to PDF, you need to have MikTex installed. You can download and install MikTex from [here](https://miktex.org/download). If you don't want to install MikTex, you can knit to HTML, open the file in the browser and print the page to PDF.
+
+For all the problems, please import the useful libraries in this chunk of code:
+
+```{r libraries, warning=FALSE, echo=FALSE, message=FALSE}
+library(ggplot2)
+library(dplyr)     #for %>%
+library(readr)     #for read_csv
+library(stringr)   #for regex functions
+```
+
+### Problem 1: the dataset
+
+Download the `titanic.csv` file attached to this homework on BBLearn. Import the data into a dataframe/tibble. Show the head and the tail of your new dataset.
+
+```{r}
+#import the dataset here
+titanic <- as.data.frame(read_csv("titanic.csv"))
+head(titanic)
+```
+
+Inspect the dataframe. How many variables and observations it has? Confirm your inference using R code that shows this information.
+
+There are 11 columns of data for each passenger, and there are 891 passengers
+
+```{r}
+#write the R code to confirm your answer here
+ncol(titanic)
+nrow(titanic)
+```
+
+Inspect the variables. Check the variable names and types to see if adjustments are needed. Change the variable's names if they are not standardized or are inconvenient to work with. Change the variable's types if they do not comply with the data in the column. You must decide whether a value should be treated as factors, ordinal factors or numerical/continuous values. Write an explanation that justify your choices and show the R code you used to make and check the changes.
+
+All spaces and underscores were changed to dots, and all letters were made lowercase so the column names are standardized.
+Sex, survived status, pclass, and embarked status were changed to factors because there is a finite choice for each data type.
+
+```{r}
+titanic <- rename_with(titanic, function(x) tolower(str_replace_all(str_replace_all(x, " ", "."), "_", ".")))
+titanic$sex <- as.factor(titanic$sex)
+titanic$survived <- as.factor(titanic$survived)
+titanic$embarked <- as.factor(titanic$embarked)
+titanic$pclass <- as.factor(titanic$pclass)
+head(titanic)
+```
+
+### Problem 2: fixing the sex's missing values using titles
+
+The column sex has a few missing values. Although we did not learn how to deal with missing values (or why doing it is important), I can tell you that one of the techniques used for that purpose is to infer the missing value from other columns. In our dataset, the `Name` variable has a title along with the passenger's name. Because titles are frequently gendered, our best guest on the value of the `sex` is an association with the person's title. Thus, do the following:
+
+1. Using regular expressions (and perhaps some other cool functions!), find a way to extract the unique titles from the column `Name`. The outcome can be either a vector or a data.frame/tibble with the titles.
+
+```{r}
+titles <- str_match(titanic$name, "M(s|r|rs|iss|aster|ajor)")[,1]
+```
+
+2. Decide, by manual inspection, to which gender each of the titles are associate with. For example, we can assume that the title `Mr.` is associated with a `male` value while `Mrs.` is associated with a `female` value for the `sex` variable. Then, create two regex patterns: one that matches any of the female titles, and one that matches any of the male titles. Ignore the titles that do not define gender. Demonstrate that the patterns are detecting the correct titles.
+
+```{r}
+male <- "M(r|aster|ajor)"
+female <- "M(s|rs|iss)"
+is.male <- !is.na(str_match(titles, male)[,1])
+is.female <- !is.na(str_match(titles, female)[,1])
+```
+
+3. Write an R code that replaces the missing values in the `sex` column according to the gender associated with the person's title:
+
+  If the `Sex` variable is NA and the `Name` variable matches a pattern with the female patterns, then the variable `Sex` receives `"female"`
+  If the `Sex` variable is NA and the `Name` variable matches a pattern with the male patterns, then the variable `Sex` receives `"male"`
+
+```{r}
+titanic$sex[is.na(titanic$sex) & is.male] <- "male"
+titanic$sex[is.na(titanic$sex) & is.female] <- "female"
+```
+
+### Problem 3: plotting some data
+
+1. Create a plot to represent the passenger's age. You must decide what `geom` representation you'll use. Justify your choice and explain what you can observe about the data from the visualization.
+
+I chose a bar plot that plots the rounded age of everyone and colors based on sex.
+I rounded it so the graph is more readable. Knowing that certain passengers are 0.5
+the way through a year isn't useful.
+
+The graph shows that most people are between 20 and 40 years old.
+
+```{r}
+ggplot(titanic) +
+  geom_bar(aes(x = round(age), fill = sex))
+```
+
+> write your answer here
+
+2. Create a plot to represent the relationship between the fare and the passenger's age. You must decide what `geom` representation you'll use. Justify your choice and explain what you can observe about the data from the visualization. Considering that one goal of the data analysis is to understand the wealthy of passengers, is age a possible relevant variable? Justify your answer.
+
+I chose a point plot because the ranges are large for both variables.
+I also colored the points by pclass to identify what ticket prices were in which pclass.
+It looks like only people above 23 years old were buying the ticket for $25.
+
+```{r}
+ggplot(filter(titanic, titanic$fare < 200)) +
+#ggplot(titanic) + 
+  geom_point(aes(y = age, x = fare, color = pclass))
+```
+
+> write your answer here
+
+3. Create a plot to represent the distribution of the fare, separated by whether the passenger survived. You must decide what `geom` representation you'll use. Justify your choice and explain what you can observe about the data from the visualization. Can we infer whether the fare influenced passenger's chance to survive?
+
+I split this into two point plots: one for the survivors and one for those that didn't survive.
+This makes it simple to see both groups.
+It looks like the survivors had higher fares.
+
+```{r}
+ggplot(titanic) +
+  geom_point(aes(y = age, x = fare, color = pclass)) +
+  facet_wrap(. ~ survived)
+```
+
+> write your answer here
+
+4. Create a plot to represent the relationship between the sex and the class in which the passenger's traveled. You must decide what `geom` representation you'll use. Justify your choice and explain what you can observe about the data from the visualization.
+
+I used a dodging bar plot that shows male and female counts for each pclass.
+There were more males than females in every class.
+
+```{r}
+ggplot(titanic) +
+  geom_bar(position="dodge", aes(x = pclass, fill = sex))
+```
+
+> write your answer here
+
+5. Create a subset of the titanic dataset that: removes the column `Cabin` (because it has way too many `NA` values!), filter out passengers who were traveling alone (no siblings/spouse nor parents/children). Then, export this subset in a new CSV file.
+
+```{r}
+titanic.alone <- filter(titanic[(! titanic %in% c('Cabin'))], titanic$siblings.spouse == 0 & titanic$parents.children == 0)
+write_csv(titanic.alone, "titanic_alone.csv")
+head(titanic.alone)
+```
+
+6. Write an R code that counts the number of passengers per boarding point. CHALLENGE: can you show the number of passengers per sex per boarding point?
+
+```{r}
+count(titanic, titanic$embarked)
+count(titanic, titanic$embarked, titanic$sex)
+```
+
+---
+**Tips**: some useful functions that you may (or may not!) use to solve this assignment:
+  - `as.data.frame(x)`: converts a vector `x` to a data.frame
+  - `unique(x)`: returns a vector/data.frame containing only the unique elements in `x`
+  - `c(x, y, z, ...):` creates a vector with the elements provided as parameters
+  - `is.na(x)`: returns `TRUE` if the value of a particular observation in `x` is `NA`
+  - `x[! x %in% c('a', 'b')]`: subsets an array, removing the positions with the elements `'a'` and `'b'`
+  - `paste(x, y, z, ...)`: concatenate the strings provided as parameters
+  - `ifelse(x, y, z)`: if `x` is `TRUE`, returns `y`, otherwise returns `z`
+  
