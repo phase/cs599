@@ -1,6 +1,6 @@
 ---
 title: "HW4"
-author: "YOUR NAME AND ID GO HERE"
+author: "Jadon Fowler jaf582 5778191"
 date: "`r Sys.Date()`"
 output:
   pdf_document: default
@@ -21,7 +21,16 @@ For all the problems, please import the useful libraries in this chunk of code:
 
 ```{r libraries, warning=FALSE, echo=FALSE, message=FALSE}
 #import the libraries here
-
+library(tidyverse)
+library(naniar)  #for gg_miss_var()
+library(ggplot2)
+library(dplyr)     #for %>%
+library(readr)     #for read_csv
+library(stringr)   #for regex functions
+library(httr)
+library(jsonlite)
+library(rvest)
+library(xml2)
 ```
 
 ### Problem 1: Reshaping data
@@ -36,7 +45,7 @@ glimpse(weather)
 
 The dataset contains the temperature for As we can see, we have many NAs in this dataset, but this may be due to the organization of variables/observations. Explain why this data is untidy.
 
-> write your explanation here
+> The columns prefixed with `d` should be rows and the element column should be two separate rows: TMIN & TMAX. 
 
 
 Then, write a code that converts the data into a tidy and clean dataframe. Make sure your dataset follows these guidelines:
@@ -48,8 +57,20 @@ Then, write a code that converts the data into a tidy and clean dataframe. Make 
 
 ```{r}
 # tidy dataframe
+w <- as.data.frame(pivot_wider(
+  pivot_longer(
+    weather,
+    cols = starts_with("d"),
+    names_to = "day", 
+    names_transform = list(day = readr::parse_number),
+    values_to = "count",
+    values_drop_na = TRUE
+  ),
+  names_from = element, 
+  values_from = count
+))
 
-
+glimpse(w)
 # drop the null measurements
 
 
@@ -84,9 +105,9 @@ Use the `rvest` functions to scrape these `div.quote` elements from each page. O
 for (x in 1:10) {
   url <- paste("https://quotes.toscrape.com/page/",x, sep = '')
   
-  page <- #read the page here
-  quotes <- #get the div.quote elements
-  quotes <- #convert the quotes from list to text (you may want to use text2)
+  page <- read_html(url)
+  quotes <- html_elements(page, ".quote")
+  quotes <- quotes %>% html_text2()
   
   #binding the scraped quotes to our dataframe:
   df_quotes <- rbind(df_quotes, as.data.frame(quotes))

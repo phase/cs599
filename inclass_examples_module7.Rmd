@@ -1,0 +1,137 @@
+---
+title: "REST API, web scraping"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+# Web scraping
+```{r}
+library(rvest)
+library(dplyr)
+library(jsonlite)
+library(httr)
+```
+
+Reads the HTML page into a `html_document` and parsing to a `data.frame`. The variable `fifa` is an HTML object, so we can't read without parsing the elements. The function `html_element` gives one particular element from a `class` or `xpath`.
+
+```{r}
+fifa <- read_html("https://en.wikipedia.org/wiki/FIFA_World_Cup")
+
+#get the xPath from the Inspect of the webpage
+results_tb <- fifa %>%
+  html_element(xpath="//*[@id='mw-content-text']/div[1]/table[5]")
+
+#this will convert the results_tb into a dataframe.
+df_fifa <- html_table(results_tb)
+glimpse(df_fifa)
+```
+
+Once we have a dataframe, we know what to do!
+
+In the example above, we used the `xpath` to get one particular table. We may want to get all the tables or all the elements labeled with the same `class`. For example, all the tables in the FIFA World Cup page has the attribute `class="wikitable sortable jquery-tablesorter"`. Let's use this to get the tables from the page.
+
+```{r}
+results_tb <- fifa %>%
+  html_elements("table.wikitable")
+print(results_tb)
+
+#this will convert the first table in the results_tb into a dataframe.
+confederation_host <- html_table(results_tb[[1]])
+glimpse(confederation_host)
+
+#using piping
+fifa %>%
+  html_elements("table.wikitable") %>%
+  html_table()
+```
+
+We can also get the elements of a particular tag.
+
+```{r}
+paragraph <- html_elements(fifa, 'p')
+
+# Raw text, as it is in the HTML file
+fifa_text <- html_text(paragraph)
+head(fifa_text)
+tail(fifa_text)
+
+# Pretty text, as it would show up in the browser (without the escape chars.)
+fifa_beauty_text <- html_text2(paragraph)
+head(fifa_beauty_text)
+tail(fifa_beauty_text)
+```
+
+## Get particular attributes
+
+```{r}
+#find the attributes of the main node (html)
+fifa_attr <- html_attrs(fifa)
+print(fifa_attr)
+
+#find all the attributes in <a> tags
+links <- html_elements(fifa, 'a')
+fifa_link_attrs <- html_attrs(links)
+head(fifa_link_attrs)
+tail(fifa_link_attrs)
+
+fifa %>% html_elements("div") %>%
+  html_children()
+```
+
+# REST API
+
+Open Notify gives access to data about the international space station.
+
+These APIs usually provide multiple endpoints, which are the ways we can interact with that service.
+
+Let's try a request and see how it goes:
+
+```{r}
+#GET function sends the request and get the response in a JSON format
+response <- GET("http://api.open-notify.org/astros.json")
+response
+
+#looking at the content
+content(response)
+content(response, "text")
+
+#looking at the headers
+headers(response)
+```
+
+Notice that the response has the code 200, which is a successful response. We now have data available!
+
+The `response` variable is in the raw Unicode format (not very useful). We want to have the nice JSON textual format, so we can convert to dataframe.
+
+```{r}
+json <- content(response, "text")
+#selecting only the variable people to build the dataframe
+json_df <- fromJSON(json)$people
+```
+
+## Another example
+
+```{r}
+response <- GET("https://earthquake.usgs.gov/fdsnws/event/1/query?",
+                query = list(format="geojson", starttime="2022-01-01",
+                             endtime="2022-01-31", maxmagnitude=7,
+                             minmagnitude=6), encode="json")
+#same as
+#response <- GET("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2022-01-01&endtime=2022-01-31&maxmagnitude=7&minmagnitude=6")
+
+#checking the status code
+status_code(response)
+
+#checking the JSON file
+content(response)
+
+#converting into JSON object
+json_earthquake <- fromJSON(content(response, "text"), simplifyVector = TRUE)
+
+eq_df <- json_earthquake$features$properties
+eq_df
+```
+
+From here, we know what to do!
