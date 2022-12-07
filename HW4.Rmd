@@ -61,7 +61,7 @@ w <- as.data.frame(pivot_wider(
   pivot_longer(
     weather,
     cols = starts_with("d"),
-    names_to = "day", 
+    names_to = "day",
     names_transform = list(day = readr::parse_number),
     values_to = "count",
     values_drop_na = TRUE

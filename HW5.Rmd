@@ -1,0 +1,303 @@
+---
+title: "HW5"
+author: "Jadon Fowler jaf582 5778191"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Instructions
+
+Download a copy of this markdown and the .xlsx file attached to this assignment. Change the `author: ` tag above to have your name and NAU's ID. Fill in the file with your solution to the proposed problems. Knit your final document to PDF and submit it through BBLearn in the assignment `[HW] Homework 5: EDA and data visualization` by the end of the day on **Tuesday, November 22 (11:59:00 PM)**.
+
+**Note:** to knit your homework to PDF, you need to have MikTex installed. You can download and install MikTex from [here](https://miktex.org/download). If you don't want to install MikTex, you can knit to HTML, open the file in the browser and print the page to PDF. You can also submit the `.Rmd` file.
+
+For all the problems, please import the useful libraries in this chunk of code:
+
+```{r libraries, warning=FALSE, echo=FALSE, message=FALSE}
+#import the libraries here
+library(tidyverse)
+library(naniar)  #for gg_miss_var()
+library(ggplot2)
+library(dplyr)     #for %>%
+library(readr)     #for read_csv
+library(stringr)   #for regex functions
+library(httr)
+library(jsonlite)
+library(rvest)
+library(xml2)
+library(tidyr)
+```
+
+### Problem 1: Importing and tidying
+
+Download the UNICEF dataset attached to this assignment on BBLearn. This dataset represents the estimates for under-five, infant, and neonatal mortality in several countries. Mortality rate is expressed as the number of under-five deaths per 1,000 live births.
+
+For the column names, notice that `U5MR` stands for `Under-five mortality rate`; `IRM` stants for `Infant mortality rate` and `NMR` stands for `Neonatal mortality rate`. The columns that has the `___.Deaths.____` show the absolute number of deaths in that year.
+
+Also notice that the the file has a .xlsx extension. Make sure you save the file as .csv format before starting the assignment.
+
+**Step 1:** import the .csv file into a `raw.mortality` dataframe. Make sure your dataframe have only the necessary data (remove rows that do not contain observations). _Note:_ DO NOT DELETE the rows from the CSV file. Fix the problem in the code, not in the source file!
+
+```{r}
+raw.mortality <- tail(as.data.frame(read_csv("unicef_allindicators.csv", col_names = FALSE)), -7)
+
+col.names <- list(
+  "iso.code",
+  "country",
+  "uncertainty.bounds"
+)
+
+categories <- c("U5MR", "IMR", "NMR", "U5deaths", "Ideaths", "Ndeaths")
+year.range <- c(1950, 2015)
+for (category in categories) {
+  for (year in seq(year.range[1], year.range[2])) {
+    col.names[length(col.names) + 1] <- paste(category, year, sep=".")
+  }
+}
+
+colnames(raw.mortality) <- col.names
+dim(raw.mortality)
+```
+
+**Step 2:** take a look at the structure. Is it a wide or long format? Justify your answer.
+
+The data looks *long* because it has many unnecessary columns.
+
+```{r}
+nrow(raw.mortality)
+#[1] 585
+ncol(raw.mortality)
+#[1] 399
+```
+
+**Step 3:** Subset the dataset to the median estimate for each country (i.e., drop rows representing lower and upper uncertainty bounds). Name this reduced dataset as sub.mortality (do not replace your original, raw dataset). Drop the uncertainty bounds factor variable because it is not necessary anymore (all the observations are in the `Median` factor).
+
+```{r}
+sub.mortality <- raw.mortality[raw.mortality$uncertainty.bounds == "Median",]
+sub.mortality <- sub.mortality[,!(names(sub.mortality) %in% c("uncertainty.bounds", "iso.code"))]
+nrow(sub.mortality)
+ncol(sub.mortality)
+```
+
+**Step 4:** Make the data tidy. You can use any resources we've studied in class to produce the final dataset, which should be named `mortality` and have four variables:
+
+* `country`: a factor variable with the country names;
+* `type`: a factor variable with six categories: `U5MR`, `IMR`, `NMR`, `U5deaths`, `Ideaths`, and `Ndeaths`;
+* `year`:  an integer variable with the year;
+* `value`: a numeric variable with the value for the given country, year, and type;
+
+Don't worry about missing values, we will deal with them in the subsequent problems.
+
+```{r}
+# pivot longer, turning the column names into (type, year) pairs
+mortality <- as.data.frame(pivot_longer(
+  sub.mortality,
+  # every column but the first 3
+  cols = as.vector(unlist(tail(col.names, -3))),
+  # separate by literal '.'
+  names_sep = "\\.",
+  names_to = c("type", "year"),
+  # transform the names into nice types
+  names_transform = list(type = as.factor,
+                         year = as.integer),
+  values_to = "value",
+  values_transform = list(value = as.numeric)
+))
+head(mortality)
+```
+
+### Problem 2: Exploratory Data Analysis
+
+In this problem, we will inspect the dataframe we just created to increase our understanding of the data.
+
+**Step 1:** Let's investigate the missing values. Apparently, there is no available data for particular types in some countries in a given year. Write a code to explore the missing data. You **MUST** comment your code to explain what you're doing and why. Then, answer the following questions:
+
+**Note:** the answer to the questions must be supported by the exploration code. If you provide an answer, but your code doesn't show how you got to that conclusion, you do NOT earn full points! Make sure your code is commented to help us to understand your thoughts.
+
+**Note 2:** Quantity is better than quality, but you don't have to show your failure attempts. Try a handful of different explorations, keep in your answer only the ones that helps you to support the answers to the questions.
+
+```{r}
+#fail mortality$value == NA
+#fail is.na(mortality$value)
+#fail mortality[is.na(mortality$value)]
+# sum every true value in the vector from is.na()
+sum(is.na(mortality$value))
+```
+
+a. How many missing values are there?
+
+19,262 missing values
+
+b. Which year range have more missing data (you can define what "range" means based on your exploration)? Why do you think the pattern you see is (or it is not) reasonable? Research a little bit to compare our exploration results to the knowledge from the real world (UNICEF history, neonatal care, mortality rates records, etc). Write a short paragraph (3-8 sentences) to explain your data and why it makes sense (or why it doesn't!).
+
+
+```{r}
+# exploration for b - d
+# trying to make a graph of NA values
+ggplot(data=mortality, aes(x=year, y=value)) +
+  geom_bar(stat="identity", color="blue", fill="yellow")
+
+ggplot(data=mortality, aes(x=year, y=sum(is.na(value)))) +
+  geom_point(stat="identity", color="blue", fill="yellow")
+
+head(mortality[is.na(mortality$value),])
+
+ggplot(data=mortality[is.na(mortality$value),], aes(x=year, y=value, fill=type)) +
+  geom_bar(stat="identity", color="blue", fill="yellow")
+
+ggplot(data=mortality[is.na(mortality$value),], aes(x=year, fill=type)) +
+  geom_histogram()
+
+# plot bins of decades of the missing data - shows the 1960s have the most NAs
+ggplot(data=mortality[is.na(mortality$value),], aes(x=year, fill=type)) +
+  geom_histogram(binwidth=10)
+
+ggplot(data=mortality[is.na(mortality$value),], aes(y=country, fill=type)) +
+  geom_bar()
+
+missing.mortality <- mortality[is.na(mortality$value),]
+sum(missing.mortality$year)
+count(missing.mortality)
+head(table(missing.mortality$country))
+# count the frequency of countries by the amount of data they're missing
+country.counts <- as.data.frame(table(missing.mortality$country))
+colnames(country.counts)
+#ggplot(data=filter(country.counts, country.counts$Freq > 150), aes(y=Var1, fill=type)) +
+#  geom_bar()
+# get the countries with over 200 missing values
+many.missing.countries <- as.data.frame(filter(country.counts, country.counts$Freq > 200))
+# get the original mortality df entries that are missing data and are in the above list
+many.missing.mortality <- missing.mortality[missing.mortality$country %in% many.missing.countries$Var1,]
+# plot count of missing values
+ggplot(data=many.missing.mortality, aes(y=country, fill=type)) +
+  geom_bar()
+
+# look at the countries with the least amount of missing data
+no.missing.countries <- as.data.frame(filter(country.counts, country.counts$Freq <= 20))
+no.missing.mortality <- missing.mortality[missing.mortality$country %in% no.missing.countries$Var1,]
+ggplot(data=no.missing.mortality, aes(y=country, fill=type)) +
+  geom_bar()
+
+
+# good graph showing missing data by year by type
+ggplot(data=mortality[is.na(mortality$value),], aes(x=year, fill=type)) +
+  geom_histogram(binwidth=1)
+```
+
+The 1950s have the greatest amount of missing data. I think this data makes
+sense because there are many missing values in earliest decades and few missing
+values in the later decades. As time goes on, we are logging numbers more
+carefully. The last graph looks as I expected it to.
+
+c. Is there any relationship between the amount of missing data and the type? Briefly explain.
+
+Some types have very few missing entries (U5deaths, U5MR) in the last couple
+decades, and some types (NMR, Ndeaths) continue to have many missing values.
+Some stats may be reported on more accurately than others.
+
+d. Is there any relationship between the amount of missing data and the country? Briefly explain.
+
+```{r}
+unique(no.missing.mortality$country)
+length(unique(no.missing.mortality$country)) # 31 countries with <= 20 missing data points
+
+unique(many.missing.mortality$country)
+length(unique(many.missing.mortality$country)) # 19 countries with > 200 missing data points
+```
+
+Wealthier countries look like they're more likely to have mostly complete data.
+In the list of countries missing a lot of data, there are many islands and very
+small countries.
+
+### Problem 3: Data visualization
+
+In this final problem, let's focus on data from the 90s (because they are complete)!
+
+**Step 1:** Filter out all the observations before 1990. Name the subset dataframe as `mortality90`. Show that we don't have any missing data in the new dataframe.
+
+```{r}
+# filter year 1990 && not NA
+head(mortality90 <- mortality[mortality$year >= 1990,])
+head(mortality90 <- mortality90[!is.na(mortality90$value),])
+```
+
+**Step 2:** Let's investigate this data a little.
+
+a. Write an R code that shows how many under-five, infant, and neonatal deaths occurred in total in the world in the years 1990, 1995, 2000, 2005, and 2015. Which age range had the largest number of death?
+
+The 1990s had the most amount of deaths, and the amount has gone down ever since.
+
+```{r}
+select.cols <- c("U5deaths", "Ideaths", "Ndeaths")
+head(selected.types <- mortality90[mortality90$type %in% select.cols,])
+head(year.freq <- as.data.frame(table(selected.types$year)))
+
+ggplot() +
+  geom_point(data=year.freq, aes(y=Var1,x=Freq))
+
+#select.years <- c(1990, 1995, 2000, 2005, 2015)
+ggplot(data=selected.types, aes(x=year, y=value, fill=type)) +
+  geom_col()
+```
+b. Write an R code that shows which countries have the largest mortality rates for neonatal? You can decide how many countries make the list of "largest mortality rates" based on your explorations. Provide an explanation about your reasoning.
+
+```{r}
+ndeaths <- mortality90[mortality90$type == "NMR",]
+sum(is.na(ndeaths$value))
+head(ndeaths)
+country.freq <- as.data.frame(table(ndeaths$country))
+ndeaths.by.country <- aggregate(x=ndeaths$value, by=list(ndeaths$country), FUN=mean)
+sorted.deaths <- ndeaths.by.country[order(ndeaths.by.country$x),]
+many.deaths <- sorted.deaths[sorted.deaths$x > 50,]
+head(select.countries <- many.deaths$Group.1)
+
+ndeaths.top <- ndeaths[ndeaths$country %in% select.countries,]
+ggplot(data=ndeaths.top, aes(x=year, y=value, color=country)) +
+  geom_line()
+```
+
+Countries with an average neonatal mortality rate > 50:
+[1] "Guinea-Bissau" "South Sudan"   "Mali"          "Angola"        "Pakistan"     
+The last graph shows the rate per year for each country.
+
+**Step 3:** Choose one scenario from the data. Write a question about the data and answer your question with a communication plot. Make this plot nice for other people to see. Consider: color scheme, theme, labels, shape and size of elements, etc. You plot must include at least three variables, but doesn't have to include all the data. You will be graded based on how neat your plot is and how well it demonstrate the answer to your question.
+
+```{r}
+
+
+select.cols <- c("U5deaths", "Ideaths", "Ndeaths")
+head(selected.types <- mortality90[mortality90$type %in% select.cols,])
+deaths.by.country <- aggregate(x=selected.types$value, by=list(selected.types$country), FUN=sum)
+many.deaths <- deaths.by.country[deaths.by.country$x > 10000000,]
+
+select.countries <- many.deaths$Group.1
+
+deaths.top <- mortality90[mortality90$country %in% select.countries,]
+head(deaths.per.year <- aggregate(x=deaths.top$value, by=list(deaths.top$country, deaths.top$year), FUN=sum))
+head(last.deaths.per.year <- tapply(deaths.per.year$x, deaths.per.year$Group.1, last))
+last.year <- max(mortality$year)
+ggplot() +
+  geom_line(data=deaths.per.year, aes(x=Group.2, y=log(x), color=Group.1)) +
+  geom_text(aes(label = names(last.deaths.per.year), x = last.year, colour = names(last.deaths.per.year), y = log(c(last.deaths.per.year)), hjust = -.02)) +
+  # Allow labels to bleed past the canvas boundaries
+  coord_cartesian(clip = 'off') +
+  # Remove legend & adjust margins to give more space for labels
+  # Remember, the margins are t-r-b-l
+  theme(legend.position = 'none',
+          plot.margin = margin(0.1, 2.6, 0.1, 0.1, "cm")) +
+  ggtitle("Countries with over 10,000,000 estimated child mortalities since 1990") + 
+  ylab("log(child mortality count)") +
+  xlab("year")
+```
+
+**Which countries experiencing the worst child mortality have not improved over the last 30 years?**
+
+India, China, Ethiopia, Indonesia, and Bangladesh have greatly improved their total child mortality over the last 30 years.
+Nigeria, Pakistan, and Congo DR have not improved.
+
